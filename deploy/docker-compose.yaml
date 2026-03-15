@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  bigbanana-ai:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: bigbanana-ai-app
+    environment:
+      - NODE_ENV=production
+      # 可选：如果你希望在容器中预置 AntSK Key，可以在部署服务器上创建 .env 文件，并在下面这一行取消注释
+      # - ANTSK_API_KEY=${ANTSK_API_KEY}
+    ports:
+      # 将服务器 3005 端口映射到容器 80 端口，用 http://120.55.91.59:3005 访问
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - bigbanana-network
+
+networks:
+  bigbanana-network:
+    driver: bridge
+
