@@ -1,6 +1,6 @@
-#  GCC AI Motion Comic & Video Factory     一站式短剧平台
+#   Videos BY AI   一站式短剧平台
 
-
+Make Moives by AI
 
 中文[中文手册](https://github.com/yuanzhongqiao/deep-printfilm/blob/main/readme-cn.md)
 
