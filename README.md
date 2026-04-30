@@ -1,10 +1,10 @@
 
 
-#  Produce  Short Video By  AI    
+#  Produce  Short Videos | Film By  AI    
 
 Make Moives by AI
 
-中文[中文手册]([https://github.com/yuanzhongqiao/deep-printfilm/blob/main/readme-cn.md](https://github.com/yuanzhongqiao/deep-printfilm/blob/main/README%20-%20cn.md))
+中文[中文手册] [https://github.com/yuanzhongqiao/deep-printfilm/blob/main/readme-cn.md](https://github.com/yuanzhongqiao/deep-printfilm/blob/main/README%20-%20cn.md)
 
 
 Short videos by AI :  www.printfilm.com
