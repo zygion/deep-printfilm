@@ -9,6 +9,7 @@ import {
   getActiveVideoModel,
 } from '../../services/modelRegistry';
 import { VideoModelDefinition, DEFAULT_VIDEO_MODEL_ID } from '../../types/model';
+import { useTranslation } from '../../i18n';
 
 interface VideoGeneratorProps {
   shot: Shot;
@@ -33,6 +34,7 @@ const VideoGenerator: React.FC<VideoGeneratorProps> = ({
   textToVideoOnly = false,
   onTextToVideoOnlyChange,
 }) => {
+  const { t } = useTranslation();
   const videoModels = getVideoModels().filter(m => m.isEnabled);
   const defaultModel = getActiveVideoModel();
   
@@ -88,7 +90,7 @@ const VideoGenerator: React.FC<VideoGeneratorProps> = ({
       
       <div className="space-y-2">
         <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block">
-          选择视频模型
+          选择{t('modelManager.videoModel')}
         </label>
         <select
           value={selectedModelId}

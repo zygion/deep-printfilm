@@ -13,6 +13,7 @@ import {
   DEFAULT_ACTIVE_MODELS,
   DEFAULT_CHAT_MODEL_ID,
   DEFAULT_IMAGE_MODEL_ID,
+  DEFAULT_VIDEO_MODEL_ID,
   DEPRECATED_BUILTIN_CHAT_MODEL_IDS,
   DEPRECATED_BUILTIN_IMAGE_MODEL_IDS,
   DEPRECATED_BUILTIN_VIDEO_MODEL_IDS,
@@ -212,7 +213,7 @@ export const getDefaultProvider = (): ModelProvider => {
 };
 
 /**
- * 添加提供商
+ * {t('modelManager.addProvider')}
  */
 export const addProvider = (provider: Omit<ModelProvider, 'id' | 'isBuiltIn'>): ModelProvider => {
   const state = loadRegistry();
@@ -280,7 +281,7 @@ export const getModels = (type?: ModelType): ModelDefinition[] => {
 };
 
 /**
- * 获取对话模型列表
+ * 获取{t('modelManager.chatModel')}列表
  */
 export const getChatModels = (): ChatModelDefinition[] => {
   return getModels('chat') as ChatModelDefinition[];
@@ -294,7 +295,7 @@ export const getImageModels = (): ImageModelDefinition[] => {
 };
 
 /**
- * 获取视频模型列表
+ * 获取{t('modelManager.videoModel')}列表
  */
 export const getVideoModels = (): VideoModelDefinition[] => {
   return getModels('video') as VideoModelDefinition[];
@@ -317,7 +318,7 @@ export const getActiveModel = (type: ModelType): ModelDefinition | undefined => 
 };
 
 /**
- * 获取当前激活的对话模型
+ * 获取当前激活的{t('modelManager.chatModel')}
  */
 export const getActiveChatModel = (): ChatModelDefinition | undefined => {
   return getActiveModel('chat') as ChatModelDefinition | undefined;
@@ -331,7 +332,7 @@ export const getActiveImageModel = (): ImageModelDefinition | undefined => {
 };
 
 /**
- * 获取当前激活的视频模型
+ * 获取当前激活的{t('modelManager.videoModel')}
  */
 export const getActiveVideoModel = (): VideoModelDefinition | undefined => {
   return getActiveModel('video') as VideoModelDefinition | undefined;
@@ -354,7 +355,7 @@ export const setActiveModel = (type: ModelType, modelId: string): boolean => {
  * 注册新模型
  * @param model - 模型定义（可包含自定义 id，不包含 isBuiltIn）
  */
-export const registerModel = (model: Omit<ModelDefinition, 'isBuiltIn'> & { id?: string }): ModelDefinition => {
+export const registerModel = (model: Omit<ModelDefinition, 'isBuiltIn' | 'id'> & { id?: string }): ModelDefinition => {
   const state = loadRegistry();
   
   const providedId = (model as any).id?.trim();
@@ -568,7 +569,7 @@ export const getDefaultVideoDuration = (): VideoDuration => {
 };
 
 /**
- * 获取视频模型类型
+ * 获取{t('modelManager.videoModel')}类型
  */
 export const getVideoModelType = (): 'sora' | 'veo' => {
   const videoModel = getActiveVideoModel();

@@ -17,9 +17,10 @@ import { useAlert } from './GlobalAlert';
 import { 
   ModelProvider, 
   ModelConfig, 
-  AspectRatio, 
-  VideoDuration 
+  AspectRatio,
+  VideoDuration
 } from '../types';
+import { useTranslation } from '../i18n';
 import {
   getModelManagerState,
   getProviders,
@@ -42,6 +43,7 @@ interface ModelManagerTabProps {
 }
 
 const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => {
+  const { t } = useTranslation();
   const { showAlert } = useAlert();
   const [providers, setProviders] = useState<ModelProvider[]>([]);
   const [config, setConfig] = useState<ModelConfig | null>(null);
@@ -67,7 +69,7 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
     setDuration(state.defaultVideoDuration);
   };
 
-  // 添加提供商
+  // {t('modelManager.addProvider')}
   const handleAddProvider = () => {
     if (!newProviderForm.name.trim() || !newProviderForm.baseUrl.trim()) return;
     
@@ -108,14 +110,14 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
 
   // 删除提供商
   const handleDeleteProvider = (id: string) => {
-    showAlert('确定要删除这个提供商吗？', {
+    showAlert(t('modelManager.deleteProviderConfirm'), {
       type: 'warning',
       showCancel: true,
       onConfirm: () => {
         deleteProvider(id);
         loadConfig();
         onConfigChange?.();
-        showAlert('提供商已删除', { type: 'success' });
+        showAlert(t('modelManager.providerDeleted'), { type: 'success' });
       }
     });
   };
@@ -158,11 +160,11 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
           <div className="flex-1">
             <h3 className="text-base font-bold text-white mb-1 flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-yellow-400" />
-              推荐使用 GitCC API
+              {t('modelManager.adTitle')}
             </h3>
             <p className="text-xs text-zinc-400 mb-3 leading-relaxed">
-              支持 GPT-5.1、Gemini-3、Veo 3.1、Sora-2 等多种模型，稳定快速，价格优惠。
-              本开源项目由 GitCC API 提供支持。
+              {t('modelManager.adDesc')}
+              {t('modelManager.adFooter')}
             </p>
             <div className="flex items-center gap-3">
               <a 
@@ -171,21 +173,21 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
                 rel="noreferrer"
                 className="px-4 py-2 bg-white text-black text-xs font-bold rounded-lg hover:bg-zinc-200 transition-colors inline-flex items-center gap-1.5"
               >
-                立即购买
+                {t('modelManager.buyNow')}
                 <ExternalLink className="w-3 h-3" />
               </a>
-              {/* 使用教程已隐藏 */}
+              {/* {t('modelManager.tutorialHidden')} */}
             </div>
           </div>
         </div>
       </div>
 
-      {/* 提供商列表 */}
+      {/* {t('modelManager.providersList')} */}
       <div>
         <div className="flex items-center justify-between mb-3">
           <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
             <Server className="w-3.5 h-3.5" />
-            API 提供商
+            {t('modelManager.providersTitle')}
           </label>
           {!isAddingProvider && (
             <button
@@ -193,32 +195,32 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
               className="text-[10px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
             >
               <Plus className="w-3 h-3" />
-              添加提供商
+              {t('modelManager.addProvider')}
             </button>
           )}
         </div>
 
         <div className="space-y-2">
-          {/* 添加新提供商表单 */}
+          {/* {t('modelManager.addProviderForm')} */}
           {isAddingProvider && (
             <div className="bg-zinc-900/50 border border-zinc-700 rounded-lg p-3 space-y-2">
               <input
                 type="text"
-                placeholder="提供商名称"
+                placeholder={t('modelManager.providerNamePlaceholder')}
                 value={newProviderForm.name}
                 onChange={(e) => setNewProviderForm({ ...newProviderForm, name: e.target.value })}
                 className="w-full bg-zinc-800 border border-zinc-700 text-white px-3 py-2 text-xs rounded focus:border-indigo-500 focus:outline-none"
               />
               <input
                 type="text"
-                placeholder="API 基础 URL（如 https://api.example.com）"
+                placeholder={t('modelManager.providerBaseUrlPlaceholder')}
                 value={newProviderForm.baseUrl}
                 onChange={(e) => setNewProviderForm({ ...newProviderForm, baseUrl: e.target.value })}
                 className="w-full bg-zinc-800 border border-zinc-700 text-white px-3 py-2 text-xs rounded focus:border-indigo-500 focus:outline-none font-mono"
               />
               <input
                 type="password"
-                placeholder="独立 API Key（可选，不填则使用全局 Key）"
+                placeholder={t('modelManager.providerApiKeyPlaceholder')}
                 value={newProviderForm.apiKey}
                 onChange={(e) => setNewProviderForm({ ...newProviderForm, apiKey: e.target.value })}
                 className="w-full bg-zinc-800 border border-zinc-700 text-white px-3 py-2 text-xs rounded focus:border-indigo-500 focus:outline-none font-mono"
@@ -230,7 +232,7 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
                   className="flex-1 py-2 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1"
                 >
                   <Check className="w-3 h-3" />
-                  确认添加
+                  {t('modelManager.confirmAdd')}
                 </button>
                 <button
                   onClick={() => {
@@ -245,7 +247,7 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
             </div>
           )}
 
-          {/* 提供商列表 */}
+          {/* {t('modelManager.providersList')} */}
           {providers.map((provider) => (
             <div 
               key={provider.id}
@@ -272,7 +274,7 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
                   />
                   <input
                     type="password"
-                    placeholder="独立 API Key（可选）"
+                    placeholder={t('modelManager.providerApiKeyEditPlaceholder')}
                     value={editForm.apiKey}
                     onChange={(e) => setEditForm({ ...editForm, apiKey: e.target.value })}
                     className="w-full bg-zinc-800 border border-zinc-700 text-white px-3 py-2 text-xs rounded focus:border-indigo-500 focus:outline-none font-mono"
@@ -300,10 +302,10 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-white">{provider.name}</span>
                       {provider.isDefault && (
-                        <span className="px-1.5 py-0.5 bg-indigo-500/20 text-indigo-400 text-[10px] rounded">默认</span>
+                        <span className="px-1.5 py-0.5 bg-indigo-500/20 text-indigo-400 text-[10px] rounded">{t('modelManager.default')}</span>
                       )}
                       {provider.isBuiltIn && (
-                        <span className="px-1.5 py-0.5 bg-zinc-700 text-zinc-400 text-[10px] rounded">内置</span>
+                        <span className="px-1.5 py-0.5 bg-zinc-700 text-zinc-400 text-[10px] rounded">{t('modelManager.builtIn')}</span>
                       )}
                     </div>
                     <p className="text-[10px] text-zinc-500 font-mono mt-0.5">{provider.baseUrl}</p>
@@ -331,13 +333,13 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
         </div>
       </div>
 
-      {/* 模型选择 */}
+      {/* {t('modelManager.modelSelection')} */}
       <div className="grid grid-cols-1 gap-4">
-        {/* 对话模型 */}
+        {/* {t('modelManager.chatModel')} */}
         <div>
           <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 flex items-center gap-2">
             <MessageSquare className="w-3.5 h-3.5" />
-            对话模型
+            {t('modelManager.chatModel')}
           </label>
           <select
             value={config.chatModel.modelName}
@@ -352,11 +354,11 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
           </select>
         </div>
 
-        {/* 视频模型 */}
+        {/* {t('modelManager.videoModel')} */}
         <div>
           <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 flex items-center gap-2">
             <Video className="w-3.5 h-3.5" />
-            视频模型
+            {t('modelManager.videoModel')}
           </label>
           <select
             value={`${config.videoModel.type}:${config.videoModel.modelName}`}
@@ -375,16 +377,16 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
         </div>
       </div>
 
-      {/* 默认设置 */}
+      {/* {t('modelManager.defaultSettings')} */}
       <div className="pt-4 border-t border-zinc-900">
         <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3 block">
-          默认生成设置
+          {t('modelManager.defaultGenSettings')}
         </label>
         
         <div className="grid grid-cols-2 gap-4">
           {/* 默认横竖屏 */}
           <div>
-            <label className="text-[10px] text-zinc-600 mb-1.5 block">默认比例</label>
+            <label className="text-[10px] text-zinc-600 mb-1.5 block">{t('modelManager.defaultAspect')}</label>
             <div className="flex gap-1">
               {(['16:9', '9:16', '1:1'] as AspectRatio[]).map((ratio) => (
                 <button
@@ -404,7 +406,7 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
 
           {/* 默认时长 */}
           <div>
-            <label className="text-[10px] text-zinc-600 mb-1.5 block">默认时长 (Sora)</label>
+            <label className="text-[10px] text-zinc-600 mb-1.5 block">{t('modelManager.defaultDurationSora')}</label>
             <div className="flex gap-1">
               {([4, 8, 12] as VideoDuration[]).map((d) => (
                 <button
@@ -416,7 +418,7 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
                       : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
                   }`}
                 >
-                  {d}秒
+                  {t('aspectRatio.seconds', { d })}
                 </button>
               ))}
             </div>

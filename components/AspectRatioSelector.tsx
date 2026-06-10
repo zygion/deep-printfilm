@@ -1,6 +1,7 @@
 import React from 'react';
 import { Monitor, Smartphone, Square } from 'lucide-react';
 import { AspectRatio, VideoDuration } from '../types';
+import { useTranslation } from '../i18n';
 
 interface AspectRatioSelectorProps {
   value: AspectRatio;
@@ -24,22 +25,23 @@ export const AspectRatioSelector: React.FC<AspectRatioSelectorProps> = ({
   compact = false,
   disabled = false
 }) => {
+  const { t } = useTranslation();
   const options: { value: AspectRatio; label: string; icon: React.ReactNode; desc: string }[] = [
     { 
       value: '16:9', 
-      label: '横屏', 
+      label: t('aspectRatio.landscape'), 
       icon: <Monitor className="w-4 h-4" />,
       desc: '1280x720'
     },
     { 
       value: '9:16', 
-      label: '竖屏', 
+      label: t('aspectRatio.portrait'), 
       icon: <Smartphone className="w-4 h-4" />,
       desc: '720x1280'
     },
     { 
       value: '1:1', 
-      label: '方形', 
+      label: t('aspectRatio.square'), 
       icon: <Square className="w-4 h-4" />,
       desc: '720x720'
     },
@@ -88,6 +90,7 @@ export const VideoDurationSelector: React.FC<VideoDurationSelectorProps> = ({
   onChange,
   disabled = false
 }) => {
+  const { t } = useTranslation();
   const durations: VideoDuration[] = [4, 8, 12];
 
   return (
@@ -106,7 +109,7 @@ export const VideoDurationSelector: React.FC<VideoDurationSelectorProps> = ({
             ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           `}
         >
-          {d}秒
+          {t('aspectRatio.seconds', { d })}
         </button>
       ))}
     </div>
@@ -118,7 +121,7 @@ interface VideoSettingsPanelProps {
   onAspectRatioChange: (value: AspectRatio) => void;
   duration: VideoDuration;
   onDurationChange: (value: VideoDuration) => void;
-  /** 视频模型类型，veo 不支持方形和时长选择 */
+  /** {t('modelManager.videoModel')}类型，veo 不支持方形和时长选择 */
   modelType: 'sora' | 'veo';
   disabled?: boolean;
   /** 支持的横竖屏比例列表 */
@@ -141,6 +144,7 @@ export const VideoSettingsPanel: React.FC<VideoSettingsPanelProps> = ({
   supportedAspectRatios,
   supportedDurations,
 }) => {
+  const { t } = useTranslation();
   // 根据模型支持的比例过滤
   const allowSquare = supportedAspectRatios 
     ? supportedAspectRatios.includes('1:1')
@@ -157,7 +161,7 @@ export const VideoSettingsPanel: React.FC<VideoSettingsPanelProps> = ({
   return (
     <div className="flex items-center gap-4 flex-wrap">
       <div className="flex items-center gap-2">
-        <span className="text-[10px] text-zinc-500 uppercase">比例</span>
+        <span className="text-[10px] text-zinc-500 uppercase">{t('aspectRatio.aspect')}</span>
         <AspectRatioSelector
           value={aspectRatio}
           onChange={onAspectRatioChange}
@@ -168,7 +172,7 @@ export const VideoSettingsPanel: React.FC<VideoSettingsPanelProps> = ({
       
       {showDuration && (
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-zinc-500 uppercase">时长</span>
+          <span className="text-[10px] text-zinc-500 uppercase">{t('aspectRatio.duration')}</span>
           <div className="flex gap-1">
             {availableDurations.map((d) => (
               <button
@@ -184,7 +188,7 @@ export const VideoSettingsPanel: React.FC<VideoSettingsPanelProps> = ({
                   ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                 `}
               >
-                {d}秒
+                {t('aspectRatio.seconds', { d })}
               </button>
             ))}
           </div>

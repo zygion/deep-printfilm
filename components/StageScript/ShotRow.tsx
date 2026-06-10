@@ -3,6 +3,7 @@ import { Aperture, Edit2, Check, X, UserPlus } from 'lucide-react';
 import { Shot, Character, ScriptData } from '../../types';
 import InlineEditor from './InlineEditor';
 import { STYLES } from './constants';
+import { useTranslation } from '../../i18n';
 
 interface Props {
   shot: Shot;
@@ -47,6 +48,7 @@ const ShotRow: React.FC<Props> = ({
   onSaveAction,
   onCancelAction
 }) => {
+  const { t } = useTranslation();
   // shot-1 / shot-1-1 需要映射为分鏡列表上的主鏡頭/子鏡頭編號。
   const getShotDisplayNumber = () => {
     const idParts = shot.id.split('-').slice(1);
@@ -80,35 +82,35 @@ const ShotRow: React.FC<Props> = ({
         {editingShotActionId === shot.id ? (
           <div className="space-y-3 p-4 bg-slate-950/55 border border-white/10 rounded-2xl">
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">动作描述</label>
+              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('shotRow.actionLabel')}</label>
               <textarea
                 value={editingShotActionText}
                 onChange={(e) => onEditAction(shot.id, e.target.value, editingShotDialogueText)}
                 className={STYLES.editor.textarea}
                 rows={3}
-                placeholder="输入动作描述..."
+                placeholder={t('shotRow.actionPlaceholder')}
               />
             </div>
             
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">台词（可选）</label>
+              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{t('shotRow.dialogueLabel')}</label>
               <textarea
                 value={editingShotDialogueText}
                 onChange={(e) => onEditAction(shot.id, editingShotActionText, e.target.value)}
                 className={`${STYLES.editor.textarea} ${STYLES.editor.serif}`}
                 rows={2}
-                placeholder="输入台词（留空表示无台词）..."
+                placeholder={t('shotRow.dialoguePlaceholder')}
               />
             </div>
             
             <div className="flex gap-2 pt-2 border-t border-white/10">
               <button onClick={onSaveAction} className="px-3 py-1.5 bg-cyan-300 text-slate-950 text-xs font-bold rounded-xl flex items-center gap-1 hover:bg-cyan-200 transition-colors">
                 <Check className="w-3 h-3" />
-                保存
+                {t('shotRow.save')}
               </button>
               <button onClick={onCancelAction} className="px-3 py-1.5 bg-white/10 text-zinc-300 text-xs font-bold rounded-xl flex items-center gap-1 hover:bg-white/15 transition-colors">
                 <X className="w-3 h-3" />
-                取消
+                {t('shotRow.cancel')}
               </button>
             </div>
           </div>
@@ -121,7 +123,7 @@ const ShotRow: React.FC<Props> = ({
               <button
                 onClick={() => onEditAction(shot.id, shot.actionSummary, shot.dialogue || '')}
                 className="opacity-0 group-hover/action:opacity-100 transition-opacity p-1.5 hover:bg-white/10 rounded-xl flex-shrink-0"
-                title="编辑动作和台词"
+                title={t('shotRow.editActionTitle')}
               >
                 <Edit2 className="w-3.5 h-3.5 text-zinc-500 hover:text-white" />
               </button>
@@ -137,11 +139,11 @@ const ShotRow: React.FC<Props> = ({
         
         <div className="pt-2">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">角色</span>
+            <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">{t('shotRow.characters')}</span>
             <button
               onClick={() => onEditCharacters(shot.id)}
               className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded-xl"
-              title="编辑角色列表"
+              title={t('shotRow.editCharacters')}
             >
               <Edit2 className="w-3 h-3 text-zinc-500 hover:text-white" />
             </button>
@@ -150,10 +152,10 @@ const ShotRow: React.FC<Props> = ({
           {editingShotCharactersId === shot.id ? (
             <div className="space-y-3 p-3 bg-slate-950/55 border border-white/10 rounded-2xl">
               <div className="space-y-2">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">当前角色</div>
+                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">{t('shotRow.currentCharacters')}</div>
                 <div className="flex flex-wrap gap-2">
                   {shot.characters.length === 0 ? (
-                    <span className="text-xs text-zinc-600 italic">无角色</span>
+                    <span className="text-xs text-zinc-600 italic">{t('shotRow.noCharacters')}</span>
                   ) : (
                     shot.characters.map(cid => {
                       const char = scriptData?.characters.find(c => c.id === cid);
@@ -163,7 +165,7 @@ const ShotRow: React.FC<Props> = ({
                           <button
                             onClick={() => onRemoveCharacter(shot.id, cid)}
                             className="ml-1 hover:text-red-400 transition-colors"
-                            title="移除角色"
+                            title={t('shotRow.removeCharacter')}
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -175,7 +177,7 @@ const ShotRow: React.FC<Props> = ({
               </div>
               
               <div className="space-y-2">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">添加角色</div>
+                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">{t('shotRow.addedCharacters')}</div>
                 <div className="flex flex-wrap gap-2">
                   {scriptData?.characters
                     .filter(char => !shot.characters.includes(char.id))
@@ -184,14 +186,14 @@ const ShotRow: React.FC<Props> = ({
                         key={char.id}
                         onClick={() => onAddCharacter(shot.id, char.id)}
                         className="flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-slate-400 border border-white/10 px-2 py-1 rounded-full bg-white/[0.04] hover:bg-cyan-300/10 hover:text-cyan-100 hover:border-cyan-200/25 transition-colors"
-                        title="添加角色"
+                        title={t('shotRow.addCharacter')}
                       >
                         <UserPlus className="w-3 h-3" />
                         <span>{char.name}</span>
                       </button>
                     ))}
                   {scriptData?.characters.filter(char => !shot.characters.includes(char.id)).length === 0 && (
-                    <span className="text-xs text-zinc-600 italic">所有角色已添加</span>
+                    <span className="text-xs text-zinc-600 italic">{t('shotRow.allCharactersAdded')}</span>
                   )}
                 </div>
               </div>
@@ -202,14 +204,14 @@ const ShotRow: React.FC<Props> = ({
                   className="px-3 py-1.5 bg-cyan-300/10 text-cyan-100 text-xs font-bold rounded-xl flex items-center gap-1 hover:bg-cyan-300/15 transition-colors border border-cyan-200/15"
                 >
                   <Check className="w-3 h-3" />
-                  完成
+                  {t('common.done')}
                 </button>
               </div>
             </div>
           ) : (
             <div className="flex flex-wrap gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
               {shot.characters.length === 0 ? (
-                <span className="text-[10px] text-zinc-700 italic">无角色</span>
+                <span className="text-[10px] text-zinc-700 italic">{t('shotRow.noCharacters')}</span>
               ) : (
                 shot.characters.map(cid => {
                   const char = scriptData?.characters.find(c => c.id === cid);
@@ -227,13 +229,13 @@ const ShotRow: React.FC<Props> = ({
         <div className="xl:hidden pt-4 border-t border-white/10">
           <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-2 flex items-center gap-2 justify-between">
             <span className="flex items-center gap-2">
-              <Aperture className="w-3 h-3" /> 画面提示词
+              <Aperture className="w-3 h-3" /> {t('shotRow.visualPrompt')}
             </span>
             {editingShotId !== shot.id && (
               <button
                 onClick={() => onEditPrompt(shot.id, shot.keyframes[0]?.visualPrompt || '')}
                 className="p-1.5 bg-white/10 hover:bg-white/15 rounded-xl transition-colors"
-                title="编辑提示词"
+                title={t('shotRow.editPromptTitle')}
               >
                 <Edit2 className="w-3 h-3 text-zinc-400" />
               </button>
@@ -246,7 +248,7 @@ const ShotRow: React.FC<Props> = ({
             onChange={(val) => onEditPrompt(shot.id, val)}
             onSave={onSavePrompt}
             onCancel={onCancelPrompt}
-            placeholder="输入画面提示词..."
+            placeholder={t('shotRow.visualPromptPlaceholder')}
             rows={4}
             mono={true}
             showEditButton={false}
@@ -257,13 +259,13 @@ const ShotRow: React.FC<Props> = ({
       <div className="w-64 hidden xl:block pl-6 border-l border-white/10">
         <div className="text-[10px] font-bold text-zinc-700 uppercase tracking-widest mb-2 flex items-center gap-2 justify-between">
           <span className="flex items-center gap-2">
-            <Aperture className="w-3 h-3" /> 画面提示词
+            <Aperture className="w-3 h-3" /> {t('shotRow.visualPrompt')}
           </span>
           {editingShotId !== shot.id && (
             <button
               onClick={() => onEditPrompt(shot.id, shot.keyframes[0]?.visualPrompt || '')}
               className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded-xl"
-              title="编辑提示词"
+              title={t('shotRow.editPromptTitle')}
             >
               <Edit2 className="w-3 h-3 text-zinc-500 hover:text-white" />
             </button>
@@ -276,7 +278,7 @@ const ShotRow: React.FC<Props> = ({
           onChange={(val) => onEditPrompt(shot.id, val)}
           onSave={onSavePrompt}
           onCancel={onCancelPrompt}
-          placeholder="输入画面提示词..."
+          placeholder={t('shotRow.visualPromptPlaceholder')}
           rows={6}
           mono={true}
           showEditButton={false}

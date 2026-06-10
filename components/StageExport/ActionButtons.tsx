@@ -2,6 +2,7 @@ import React from 'react';
 import { Play, Download, FileVideo, Loader2 } from 'lucide-react';
 import { STYLES, DownloadState } from './constants';
 import { useAlert } from '../GlobalAlert';
+import { useTranslation } from '../../i18n';
 
 interface Props {
   completedShotsCount: number;
@@ -20,6 +21,7 @@ const ActionButtons: React.FC<Props> = ({
   onPreview,
   onDownloadMaster
 }) => {
+  const { t } = useTranslation();
   const { showAlert } = useAlert();
   const { isDownloading, phase, progress: downloadProgress } = downloadState;
 

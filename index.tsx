@@ -1,8 +1,9 @@
-// Author: forsearch | Updated: 2026-04-30
+﻿// Author: forsearch | Updated: 2026-04-30
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { AlertProvider } from './components/GlobalAlert';
+import { I18nProvider } from './i18n';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -12,8 +13,10 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <AlertProvider>
-      <App />
-    </AlertProvider>
+    <I18nProvider>
+      <AlertProvider>
+        <App />
+      </AlertProvider>
+    </I18nProvider>
   </React.StrictMode>
 );

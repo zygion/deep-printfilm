@@ -1,7 +1,7 @@
 import React from 'react';
 import { STATUS_STYLES, STATUS_LABELS } from './constants';
 
-type Status = 'completed' | 'generating' | 'failed' | 'idle';
+type Status = 'pending' | 'completed' | 'generating' | 'failed' | 'idle';
 
 interface Props {
   status: Status;

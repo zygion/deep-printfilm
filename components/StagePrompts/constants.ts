@@ -42,6 +42,7 @@ export type EditingPrompt = {
 } | null;
 
 export const STATUS_STYLES = {
+  pending: 'text-zinc-500',
   completed: 'text-green-400 bg-green-500/10',
   generating: 'text-yellow-400 bg-yellow-500/10',
   failed: 'text-red-400 bg-red-500/10',
@@ -49,6 +50,7 @@ export const STATUS_STYLES = {
 };
 
 export const STATUS_LABELS = {
+  pending: '待生成',
   completed: '✓ 已生成',
   generating: '生成中',
   failed: '失败',

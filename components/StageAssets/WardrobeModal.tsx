@@ -3,6 +3,7 @@ import { User, X, Shirt, Plus, RefreshCw, Loader2, Upload, AlertCircle } from 'l
 import { Character, CharacterVariation } from '../../types';
 import ImageUploadButton from './ImageUploadButton';
 import { generateId } from './utils';
+import { useTranslation } from '../../i18n';
 
 interface WardrobeModalProps {
   character: Character;
@@ -23,6 +24,7 @@ const WardrobeModal: React.FC<WardrobeModalProps> = ({
   onUploadVariation,
   onImageClick,
 }) => {
+  const { t } = useTranslation();
   const [newVarName, setNewVarName] = useState('');
   const [newVarPrompt, setNewVarPrompt] = useState('');
 
@@ -115,7 +117,7 @@ const WardrobeModal: React.FC<WardrobeModalProps> = ({
                       )}
                       {variation.status === 'failed' && !variation.referenceImage && (
                         <div className="absolute bottom-0 left-0 right-0 bg-red-900/80 text-white text-[8px] text-center py-0.5">
-                          失败
+                          {t('wardrobe.failed')}
                         </div>
                       )}
                     </div>
@@ -141,7 +143,7 @@ const WardrobeModal: React.FC<WardrobeModalProps> = ({
                           }`}
                         >
                           <RefreshCw className={`w-3 h-3 ${variation.status === 'generating' ? 'animate-spin' : ''}`} />
-                          {variation.status === 'failed' ? '重试' : variation.referenceImage ? 'Regenerate' : 'Generate Look'}
+                          {variation.status === 'failed' ? t('wardrobe.retry') : variation.referenceImage ? t('wardrobe.regenerate') : t('wardrobe.generateLook')}
                         </button>
                         <label className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 hover:text-white flex items-center gap-1 transition-colors cursor-pointer">
                           <Upload className="w-3 h-3" />

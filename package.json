@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
+    "@types/react": "^19.2.17",
     "@vitejs/plugin-react": "^5.0.0",
     "electron": "^33.0.0",
     "electron-builder": "^25.0.0",
@@ -43,7 +44,9 @@
       "dist/**"
     ],
     "win": {
-      "target": ["nsis"],
+      "target": [
+        "nsis"
+      ],
       "signAndEditExecutable": false
     },
     "nsis": {
@@ -51,7 +54,9 @@
       "allowToChangeInstallationDirectory": true
     },
     "mac": {
-      "target": ["dmg"],
+      "target": [
+        "dmg"
+      ],
       "category": "public.app-category.video"
     }
   }

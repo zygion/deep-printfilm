@@ -1,6 +1,7 @@
-// Author: forsearch | Updated: 2026-04-30
+﻿// Author: forsearch | Updated: 2026-04-30
 import React from 'react';
 import { LayoutDashboard, FileText, Users, Clapperboard, Film, ChevronLeft, ListTree, HelpCircle, Cpu } from 'lucide-react';
+import { useTranslation } from '../i18n';
 const LOGO_URL = 'https://www.gitcc.com/uploads/-/system/appearance/header_logo/1/gitpp.png';
 
 interface SidebarProps {
@@ -13,19 +14,20 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, projectName, onShowOnboarding, onShowModelConfig }) => {
+  const { t } = useTranslation();
   const navItems = [
-    { id: 'script', label: '剧情创作', icon: FileText, sub: 'Phase 01' },
-    { id: 'assets', label: '场景角色', icon: Users, sub: 'Phase 02' },
-    { id: 'director', label: 'AI工作台', icon: Clapperboard, sub: 'Phase 03' },
-    { id: 'export', label: '制片导出', icon: Film, sub: 'Phase 04' },
-    { id: 'prompts', label: '资产管理', icon: ListTree, sub: 'Advanced' },
+    { id: 'script', label: t('sidebar.stages.script'), icon: FileText, sub: 'Phase 01' },
+    { id: 'assets', label: t('sidebar.stages.assets'), icon: Users, sub: 'Phase 02' },
+    { id: 'director', label: t('sidebar.stages.director'), icon: Clapperboard, sub: 'Phase 03' },
+    { id: 'export', label: t('sidebar.stages.export'), icon: Film, sub: 'Phase 04' },
+    { id: 'prompts', label: t('sidebar.stages.prompts'), icon: ListTree, sub: 'Advanced' },
   ];
 
   return (
     <aside className="w-72 bg-slate-950/75 border-r border-cyan-300/10 h-screen fixed left-0 top-0 flex flex-col z-50 select-none backdrop-blur-2xl shadow-2xl shadow-cyan-950/30">
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.12),_transparent_34%),linear-gradient(180deg,_rgba(15,23,42,0.7),_rgba(2,6,23,0.92))]" />
       <div className="relative p-6 border-b border-white/10">
-        <a 
+        <a
           href="https://www.gitcc.com/"
           target="_blank"
           rel="noopener noreferrer"
@@ -35,23 +37,23 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, proje
             <img src={LOGO_URL} alt="Logo" className="w-7 h-7 flex-shrink-0" />
           </div>
           <div className="overflow-hidden">
-            <h1 className="text-sm font-bold text-white tracking-wider group-hover:text-cyan-100 transition-colors">AI 漫剧工场</h1>
-            <p className="text-[10px] text-cyan-200/50 tracking-widest group-hover:text-cyan-200/80 transition-colors">Creative Studio</p>
+            <h1 className="text-sm font-bold text-white tracking-wider group-hover:text-cyan-100 transition-colors">{t('sidebar.title')}</h1>
+            <p className="text-[10px] text-cyan-200/50 tracking-widest group-hover:text-cyan-200/80 transition-colors">{t('app.tagline')}</p>
           </div>
         </a>
 
-        <button 
+        <button
           onClick={onExit}
           className="flex items-center gap-2 text-slate-400 hover:text-cyan-100 transition-colors text-xs font-mono uppercase tracking-wide group"
         >
           <ChevronLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-          返回项目列表
+          {t('sidebar.backToProjects')}
         </button>
       </div>
 
       <div className="relative px-6 py-4 border-b border-white/10">
-         <div className="text-[10px] text-cyan-200/45 uppercase tracking-widest mb-1">当前项目</div>
-         <div className="text-sm font-medium text-slate-100 truncate font-mono">{projectName || '未命名项目'}</div>
+         <div className="text-[10px] text-cyan-200/45 uppercase tracking-widest mb-1">{t('sidebar.currentProject')}</div>
+         <div className="text-sm font-medium text-slate-100 truncate font-mono">{projectName || t('sidebar.untitledProject')}</div>
       </div>
 
       <nav className="relative flex-1 p-4 space-y-2">
@@ -62,8 +64,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, proje
               key={item.id}
               onClick={() => setStage(item.id as any)}
               className={`w-full flex items-center justify-between px-4 py-4 transition-all duration-200 group relative rounded-2xl border ${
-                isActive 
-                  ? 'border-cyan-300/40 bg-gradient-to-r from-cyan-500/20 via-sky-500/10 to-fuchsia-500/10 text-white shadow-lg shadow-cyan-500/10' 
+                isActive
+                  ? 'border-cyan-300/40 bg-gradient-to-r from-cyan-500/20 via-sky-500/10 to-fuchsia-500/10 text-white shadow-lg shadow-cyan-500/10'
                   : 'border-white/5 text-slate-400 hover:text-slate-100 hover:bg-white/5 hover:border-white/10'
               }`}
             >
@@ -83,20 +85,20 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, proje
 
       <div className="relative p-6 border-t border-white/10 space-y-3">
         {onShowOnboarding && (
-          <button 
+          <button
             onClick={onShowOnboarding}
             className="w-full flex items-center justify-between text-slate-500 hover:text-cyan-100 cursor-pointer transition-colors rounded-xl px-3 py-2 hover:bg-white/5"
           >
-            <span className="font-mono text-[10px] uppercase tracking-widest">新手引导</span>
+            <span className="font-mono text-[10px] uppercase tracking-widest">{t('sidebar.help')}</span>
             <HelpCircle className="w-4 h-4" />
           </button>
         )}
         {onShowModelConfig && (
-          <button 
+          <button
             onClick={onShowModelConfig}
             className="w-full flex items-center justify-between text-slate-500 hover:text-cyan-100 cursor-pointer transition-colors rounded-xl px-3 py-2 hover:bg-white/5"
           >
-            <span className="font-mono text-[10px] uppercase tracking-widest">模型配置</span>
+            <span className="font-mono text-[10px] uppercase tracking-widest">{t('sidebar.modelConfig')}</span>
             <Cpu className="w-4 h-4" />
           </button>
         )}

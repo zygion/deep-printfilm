@@ -1,4 +1,11 @@
 import { Scene } from '../../types';
+import { useTranslation } from '../../i18n';
+
+export type ConfigValidationError =
+  | 'emptyScript'
+  | 'emptyDuration'
+  | 'emptyModel'
+  | 'emptyStyle';
 
 export const getFinalValue = (selected: string, customInput: string): string => {
   return selected === 'custom' ? customInput : selected;
@@ -17,6 +24,7 @@ export const deduplicateScenes = (scenes: Scene[] = []): Scene[] => {
 };
 
 export const getTextStats = (text: string) => {
+  const { t } = useTranslation();
   return {
     characters: text.length,
     lines: text.split('\n').length,
@@ -29,18 +37,18 @@ export const validateConfig = (config: {
   duration: string;
   model: string;
   visualStyle: string;
-}): { valid: boolean; error: string | null } => {
+}): { valid: boolean; error: ConfigValidationError | null } => {
   if (!config.script.trim()) {
-    return { valid: false, error: '请输入剧本内容。' };
+    return { valid: false, error: 'emptyScript' };
   }
   if (!config.duration) {
-    return { valid: false, error: '请选择目标时长。' };
+    return { valid: false, error: 'emptyDuration' };
   }
   if (!config.model) {
-    return { valid: false, error: '请选择或输入模型名称。' };
+    return { valid: false, error: 'emptyModel' };
   }
   if (!config.visualStyle) {
-    return { valid: false, error: '请选择或输入视觉风格。' };
+    return { valid: false, error: 'emptyStyle' };
   }
   return { valid: true, error: null };
 };

@@ -4,4 +4,6 @@
 
 export * from './chatAdapter';
 export * from './imageAdapter';
-export * from './videoAdapter';
+export {
+  callVideoApi,
+} from './videoAdapter';

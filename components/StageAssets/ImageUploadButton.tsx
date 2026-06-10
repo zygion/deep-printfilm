@@ -1,5 +1,6 @@
 import React from 'react';
 import { Upload, Sparkles, Loader2 } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 
 interface ImageUploadButtonProps {
   onUpload: (file: File) => void;
@@ -17,11 +18,14 @@ const ImageUploadButton: React.FC<ImageUploadButtonProps> = ({
   onGenerate,
   isGenerating = false,
   hasImage = false,
-  uploadLabel = '上传',
-  generateLabel = '生成',
+  uploadLabel,
+  generateLabel,
   size = 'medium',
   variant = 'separate',
 }) => {
+  const { t } = useTranslation();
+  const finalUploadLabel = uploadLabel ?? t('imageUploadButton.upload');
+  const finalGenerateLabel = generateLabel ?? t('imageUploadButton.generate');
   const sizeClasses = {
     small: 'px-3 py-1.5 text-[10px]',
     medium: 'px-4 py-2 text-xs',
@@ -52,12 +56,12 @@ const ImageUploadButton: React.FC<ImageUploadButtonProps> = ({
             ) : (
               <Sparkles className="w-3 h-3" />
             )}
-            {generateLabel}
+            {finalGenerateLabel}
           </button>
         )}
         <label className={buttonClass}>
           <Upload className="w-3 h-3" />
-          {uploadLabel}
+          {finalUploadLabel}
           <input
             type="file"
             accept="image/*"
@@ -80,19 +84,19 @@ const ImageUploadButton: React.FC<ImageUploadButtonProps> = ({
           {isGenerating ? (
             <>
               <Loader2 className="w-3 h-3 animate-spin" />
-              生成中...
+              {t('imageUploadButton.generating')}
             </>
           ) : (
             <>
               <Sparkles className="w-3 h-3" />
-              重新生成
+              {t('imageUploadButton.regenerate')}
             </>
           )}
         </button>
       )}
       <label className={`flex-1 py-1.5 bg-white/[0.06] hover:bg-white/10 text-slate-400 hover:text-white rounded-xl text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 border border-white/10 hover:border-cyan-300/30 transition-colors cursor-pointer`}>
         <Upload className="w-3 h-3" />
-        {uploadLabel}
+        {finalUploadLabel}
         <input
           type="file"
           accept="image/*"

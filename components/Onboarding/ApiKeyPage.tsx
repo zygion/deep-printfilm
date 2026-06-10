@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Key, Loader2, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react';
+import { useTranslation } from '../../i18n';
 import { verifyApiKey } from '../../services/geminiService';
 
 interface ApiKeyPageProps {
@@ -9,23 +10,24 @@ interface ApiKeyPageProps {
   onSkip: () => void;
 }
 
-const ApiKeyPage: React.FC<ApiKeyPageProps> = ({ 
-  currentApiKey, 
-  onSaveApiKey, 
+const ApiKeyPage: React.FC<ApiKeyPageProps> = ({
+  currentApiKey,
+  onSaveApiKey,
   onNext,
-  onSkip 
+  onSkip
 }) => {
+  const { t } = useTranslation();
   const [inputKey, setInputKey] = useState(currentApiKey);
   const [isVerifying, setIsVerifying] = useState(false);
   const [verifyStatus, setVerifyStatus] = useState<'idle' | 'success' | 'error'>(
     currentApiKey ? 'success' : 'idle'
   );
-  const [verifyMessage, setVerifyMessage] = useState(currentApiKey ? '已配置' : '');
+  const [verifyMessage, setVerifyMessage] = useState(currentApiKey ? t('onboarding.apiKey.configured') : '');
 
   const handleVerifyAndContinue = async () => {
     if (!inputKey.trim()) {
       setVerifyStatus('error');
-      setVerifyMessage('请输入 API Key');
+      setVerifyMessage(t('onboarding.apiKey.empty'));
       return;
     }
 
@@ -34,12 +36,11 @@ const ApiKeyPage: React.FC<ApiKeyPageProps> = ({
 
     try {
       const result = await verifyApiKey(inputKey.trim());
-      
+
       if (result.success) {
         setVerifyStatus('success');
-        setVerifyMessage('验证成功！');
+        setVerifyMessage(t('onboarding.apiKey.verifySuccess'));
         onSaveApiKey(inputKey.trim());
-        // 短暂延迟后进入下一步
         setTimeout(() => {
           onNext();
         }, 500);
@@ -49,7 +50,7 @@ const ApiKeyPage: React.FC<ApiKeyPageProps> = ({
       }
     } catch (error: any) {
       setVerifyStatus('error');
-      setVerifyMessage(error.message || '验证出错');
+      setVerifyMessage(error.message || t('onboarding.apiKey.verifyFailed'));
     } finally {
       setIsVerifying(false);
     }
@@ -57,7 +58,6 @@ const ApiKeyPage: React.FC<ApiKeyPageProps> = ({
 
   return (
     <div className="flex flex-col items-center text-center">
-      {/* 图标 */}
       <div className="relative mb-6">
         <div className="w-16 h-16 rounded-2xl bg-cyan-300/10 border border-cyan-200/25 flex items-center justify-center">
           <Key className="w-8 h-8 text-cyan-300" />
@@ -69,17 +69,14 @@ const ApiKeyPage: React.FC<ApiKeyPageProps> = ({
         )}
       </div>
 
-      {/* 标题 */}
       <h2 className="text-2xl font-bold text-white mb-2">
-        配置你的 API Key
+        {t('onboarding.apiKey.title')}
       </h2>
 
-      {/* 说明 */}
       <p className="text-zinc-500 text-sm mb-6 max-w-xs">
-        需要 API Key 才能使用 AI 生成功能
+        {t('onboarding.apiKey.description')}
       </p>
 
-      {/* 输入框 */}
       <div className="w-full max-w-sm mb-4">
         <input
           type="password"
@@ -89,7 +86,7 @@ const ApiKeyPage: React.FC<ApiKeyPageProps> = ({
             setVerifyStatus('idle');
             setVerifyMessage('');
           }}
-          placeholder="输入你的 API Key..."
+          placeholder={t('onboarding.apiKey.placeholder')}
           className="w-full bg-white/[0.06] border border-white/10 text-white px-4 py-3 text-sm rounded-xl focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10 transition-all font-mono placeholder:text-slate-500 text-center"
           disabled={isVerifying}
           onKeyDown={(e) => {
@@ -99,7 +96,6 @@ const ApiKeyPage: React.FC<ApiKeyPageProps> = ({
           }}
         />
 
-        {/* 状态提示 */}
         {verifyMessage && (
           <div className={`mt-2 flex items-center justify-center gap-2 text-xs ${
             verifyStatus === 'success' ? 'text-green-400' : 'text-red-400'
@@ -114,28 +110,26 @@ const ApiKeyPage: React.FC<ApiKeyPageProps> = ({
         )}
       </div>
 
-      {/* 获取 Key 链接 */}
       <div className="flex items-center gap-4 mb-8">
-        <a 
-          href="https://api.gitcc.com" 
-          target="_blank" 
-          rel="noreferrer" 
+        <a
+          href="https://api.gitcc.com"
+          target="_blank"
+          rel="noreferrer"
           className="text-xs text-cyan-300 hover:underline inline-flex items-center gap-1"
         >
-          立即购买 <ExternalLink className="w-3 h-3" />
+          {t('onboarding.apiKey.buyLink')} <ExternalLink className="w-3 h-3" />
         </a>
         <span className="text-zinc-700">|</span>
-        <a 
-          href="https://www.gitcc.com" 
-          target="_blank" 
-          rel="noreferrer" 
+        <a
+          href="https://www.gitcc.com"
+          target="_blank"
+          rel="noreferrer"
           className="text-xs text-cyan-300 hover:underline inline-flex items-center gap-1"
         >
-          立即咨询 <ExternalLink className="w-3 h-3" />
+          {t('onboarding.apiKey.consultLink')} <ExternalLink className="w-3 h-3" />
         </a>
       </div>
 
-      {/* 主按钮 */}
       <button
         onClick={handleVerifyAndContinue}
         disabled={isVerifying}
@@ -144,19 +138,18 @@ const ApiKeyPage: React.FC<ApiKeyPageProps> = ({
         {isVerifying ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
-            验证中...
+            {t('onboarding.apiKey.verifying')}
           </>
         ) : (
-          '验证并继续'
+          t('onboarding.apiKey.verifyContinue')
         )}
       </button>
 
-      {/* 跳过入口 */}
       <button
         onClick={onSkip}
         className="mt-4 text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
       >
-        稍后在设置中配置
+        {t('onboarding.apiKey.skip')}
       </button>
     </div>
   );

@@ -1,4 +1,4 @@
-// Author: forsearch | Updated: 2026-04-30
+﻿// Author: forsearch | Updated: 2026-04-30
 import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import StageScript from './components/StageScript';
@@ -9,19 +9,21 @@ import StagePrompts from './components/StagePrompts';
 import Dashboard from './components/Dashboard';
 import Onboarding, { shouldShowOnboarding, resetOnboarding } from './components/Onboarding';
 import ModelConfigModal from './components/ModelConfig';
+import LanguageSwitcher from './components/LanguageSwitcher';
 import { ProjectState } from './types';
-import { Save, CheckCircle, X } from 'lucide-react';
+import { Save, CheckCircle } from 'lucide-react';
 import { saveProjectToDB } from './services/storageService';
 import { setGlobalApiKey } from './services/geminiService';
 import { setLogCallback, clearLogCallback } from './services/renderLogService';
+import { useTranslation } from './i18n';
 const LOGO_URL = 'https://www.gitcc.com/uploads/-/system/appearance/header_logo/1/gitpp.png';
 
 function App() {
+  const { t } = useTranslation();
   const [project, setProject] = useState<ProjectState | null>(null);
   const [apiKey, setApiKey] = useState<string>('');
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved');
   const [showSaveStatus, setShowSaveStatus] = useState(false);
-  const [showQrCode, setShowQrCode] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showModelConfig, setShowModelConfig] = useState(false);
@@ -86,7 +88,7 @@ function App() {
       if (event.error?.name === 'ApiKeyError' || 
           event.error?.message?.includes('API Key missing') ||
           event.error?.message?.includes('AntSK API Key')) {
-        console.warn('🔐 检测到 API Key 错误，请配置 API Key...');
+        console.warn('Detected API Key error, opening configuration...');
         setShowModelConfig(true);
         event.preventDefault();
       }
@@ -96,7 +98,7 @@ function App() {
       if (event.reason?.name === 'ApiKeyError' ||
           event.reason?.message?.includes('API Key missing') ||
           event.reason?.message?.includes('AntSK API Key')) {
-        console.warn('🔐 检测到 API Key 错误，请配置 API Key...');
+        console.warn('Detected API Key error, opening configuration...');
         setShowModelConfig(true);
         event.preventDefault();
       }
@@ -208,7 +210,7 @@ function App() {
       case 'prompts':
         return <StagePrompts project={project} updateProject={updateProject} />;
       default:
-        return <div className="text-white">未知阶段</div>;
+        return <div className="text-white">{t('common.unknown')}</div>;
     }
   };
 
@@ -217,18 +219,18 @@ function App() {
       <div className="h-screen bg-[#050505] flex items-center justify-center p-6">
         <div className="max-w-md text-center space-y-6">
           <img src={LOGO_URL} alt="Logo" className="w-20 h-20 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-white mb-2">AI 漫剧工场</h1>
+          <h1 className="text-2xl font-bold text-white mb-2">{t('app.mobile.headline')}</h1>
           <div className="bg-[#0A0A0A] border border-zinc-800 rounded-xl p-8">
             <p className="text-zinc-400 text-base leading-relaxed mb-4">
-              为了获得最佳体验，请使用 PC 端浏览器访问。
+              {t('app.mobile.warning')}
             </p>
             <p className="text-zinc-600 text-sm">
-              本应用需要较大的屏幕空间和桌面级浏览器环境才能正常运行。
+              {t('app.mobile.subtext')}
             </p>
           </div>
           <div className="text-xs text-zinc-700">
             <a href="https://www.gitcc.com/" target="_blank" rel="noreferrer" className="hover:text-indigo-400 transition-colors">
-              访问产品首页了解更多
+              {t('app.mobile.footer')}
             </a>
           </div>
         </div>
@@ -274,18 +276,20 @@ function App() {
       <main className="ml-72 flex-1 h-screen overflow-hidden relative">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,_transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,_transparent_1px)] bg-[size:48px_48px] opacity-25" />
         {renderStage()}
+
+        <LanguageSwitcher variant="floating" />
         
         {showSaveStatus && (
-          <div className="absolute top-4 right-6 pointer-events-none flex items-center gap-2 text-xs font-mono text-cyan-100 bg-slate-950/60 border border-cyan-300/20 px-3 py-1.5 rounded-full backdrop-blur-xl z-50 animate-in fade-in slide-in-from-top-2 duration-200 shadow-lg shadow-cyan-500/10">
+          <div className="absolute bottom-4 right-6 pointer-events-none flex items-center gap-2 text-xs font-mono text-cyan-100 bg-slate-950/60 border border-cyan-300/20 px-3 py-1.5 rounded-full backdrop-blur-xl z-50 animate-in fade-in slide-in-from-bottom-2 duration-200 shadow-lg shadow-cyan-500/10">
              {saveStatus === 'saving' ? (
                <>
                  <Save className="w-3 h-3 animate-pulse" />
-                 保存中...
+                 {t('common.saving')}
                </>
              ) : (
                <>
                  <CheckCircle className="w-3 h-3 text-emerald-400" />
-                 已保存
+                 {t('common.saved')}
                </>
              )}
           </div>

@@ -1364,8 +1364,9 @@ export const generateVideo = async (
   const apiKey = checkApiKey('video', model);
   const apiBase = getApiBase('video', model);
   const endpoint = resolvedVideoModel?.endpoint || '';
+  const videoMode = resolvedVideoModel?.type === 'video' ? resolvedVideoModel.params.mode : undefined;
   const isAsyncMode =
-    resolvedVideoModel?.params?.mode === 'async' ||
+    videoMode === 'async' ||
     requestModel === 'sora-2' ||
     requestModel === DEFAULT_VIDEO_MODEL_ID ||
     (requestModel.startsWith('doubao-seedance') && endpoint.includes('/v1/videos'));
@@ -2121,7 +2122,7 @@ ${actionReferenceExamples}
 /**
  * 将视频提示词改写为更易通过平台内容审核的版本（弱化暴力、血腥、敏感表述，保留氛围与剧情）
  * @param videoPrompt - 原始视频生成提示词（完整段落）
- * @param model - 使用的对话模型 id，默认使用当前激活的 chat 模型
+ * @param model - 使用的{t('modelManager.chatModel')} id，默认使用当前激活的 chat 模型
  * @returns 改写后的提示词，可直接用于再次请求视频生成
  */
 export const rewritePromptForModeration = async (

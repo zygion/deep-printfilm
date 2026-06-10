@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image as ImageIcon, Video } from 'lucide-react';
 import { Shot } from '../../types';
+import { useTranslation } from '../../i18n';
 
 interface ShotCardProps {
   shot: Shot;
@@ -10,6 +11,7 @@ interface ShotCardProps {
 }
 
 const ShotCard: React.FC<ShotCardProps> = ({ shot, index, isActive, onClick }) => {
+  const { t } = useTranslation();
   const sKf = shot.keyframes?.find(k => k.type === 'start');
   const hasImage = !!sKf?.imageUrl;
   const hasVideo = !!shot.interval?.videoUrl;

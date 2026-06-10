@@ -1,6 +1,7 @@
 import { Shot, ProjectState, Keyframe } from '../../types';
 import { VISUAL_STYLE_PROMPTS, VIDEO_PROMPT_TEMPLATES } from './constants';
 import { getCameraMovementCompositionGuide } from './cameraMovementGuides';
+import { useTranslation } from '../../i18n';
 
 export const getRefImagesForShot = (shot: Shot, scriptData: ProjectState['scriptData']): string[] => {
   const referenceImages: string[] = [];

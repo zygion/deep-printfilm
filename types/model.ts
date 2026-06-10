@@ -199,10 +199,10 @@ export const BUILTIN_IMAGE_MODELS: ImageModelDefinition[] = [
 /** 已下架的内置图片模型（加载时移除，激活项迁移到默认模型） */
 export const DEPRECATED_BUILTIN_IMAGE_MODEL_IDS = ['gemini-3-pro-image-preview'] as const;
 
-/** 全局默认视频模型 ID */
+/** 全局默认{t('modelManager.videoModel')} ID */
 export const DEFAULT_VIDEO_MODEL_ID = 'doubao-seedance-2-0-fast';
 
-/** 已下架的内置视频模型（加载时迁移到默认视频模型，自定义模型不受影响） */
+/** 已下架的内置{t('modelManager.videoModel')}（加载时迁移到默认{t('modelManager.videoModel')}，自定义模型不受影响） */
 export const DEPRECATED_BUILTIN_VIDEO_MODEL_IDS = [
   'veo',
   'veo-3.1',
@@ -212,7 +212,7 @@ export const DEPRECATED_BUILTIN_VIDEO_MODEL_IDS = [
   'veo_3_1_i2v_s_fast_fl_portrait',
 ] as const;
 
-/** 将旧内置视频模型 ID 迁移为默认视频模型；其余 ID（含用户自定义）原样保留 */
+/** 将旧内置{t('modelManager.videoModel')} ID 迁移为默认{t('modelManager.videoModel')}；其余 ID（含用户自定义）原样保留 */
 export const migrateDeprecatedVideoModelId = (modelId?: string): string => {
   if (!modelId?.trim()) return DEFAULT_VIDEO_MODEL_ID;
   if (

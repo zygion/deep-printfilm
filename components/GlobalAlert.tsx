@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+﻿import React, { createContext, useContext, useState, useCallback } from 'react';
 import { X, AlertCircle, CheckCircle, Info } from 'lucide-react';
+import { useTranslation } from '../i18n';
 
 type AlertType = 'info' | 'success' | 'error' | 'warning';
 
@@ -41,6 +42,7 @@ interface AlertState {
 }
 
 export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { t } = useTranslation();
   const [alertState, setAlertState] = useState<AlertState>({
     isOpen: false,
     message: '',
@@ -55,11 +57,11 @@ export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       type: options?.type || 'info',
       onConfirm: options?.onConfirm,
       onCancel: options?.onCancel,
-      confirmText: options?.confirmText || '确定',
-      cancelText: options?.cancelText || '取消',
+      confirmText: options?.confirmText || t('common.confirm'),
+      cancelText: options?.cancelText || t('common.cancel'),
       showCancel: options?.showCancel || false
     });
-  }, []);
+  }, [t]);
 
   const closeAlert = useCallback(() => {
     if (alertState.onConfirm) {
@@ -87,10 +89,10 @@ export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const getTitle = () => {
     if (alertState.title) return alertState.title;
     switch (alertState.type) {
-      case 'success': return '成功';
-      case 'error': return '错误';
-      case 'warning': return '警告';
-      default: return '提示';
+      case 'success': return t('alert.titleSuccess');
+      case 'error': return t('alert.titleError');
+      case 'warning': return t('alert.titleWarning');
+      default: return t('alert.titleInfo');
     }
   };
 
@@ -98,11 +100,11 @@ export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     <AlertContext.Provider value={{ showAlert, closeAlert }}>
       {children}
       {alertState.isOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-[9999] bg-slate-950/80 backdrop-blur-xl flex items-center justify-center p-4"
           onClick={alertState.showCancel ? handleCancel : closeAlert}
         >
-          <div 
+          <div
             className="bg-slate-950/90 border border-cyan-200/15 rounded-[1.75rem] p-6 max-w-sm w-full space-y-4 shadow-2xl shadow-cyan-950/30 animate-in fade-in zoom-in duration-200"
             onClick={(e) => e.stopPropagation()}
           >
@@ -111,15 +113,15 @@ export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 {getIcon()}
                 <h3 className="text-lg font-semibold text-white">{getTitle()}</h3>
               </div>
-              <button 
+              <button
                 onClick={alertState.showCancel ? handleCancel : closeAlert}
                 className="text-zinc-400 hover:text-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
-            <div className="text-zinc-300 text-sm leading-relaxed">
+
+            <div className="text-zinc-300 text-sm leading-relaxed whitespace-pre-line">
               {alertState.message}
             </div>
 

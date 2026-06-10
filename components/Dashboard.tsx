@@ -1,10 +1,11 @@
-// Author: forsearch | Updated: 2026-04-30
+﻿// Author: forsearch | Updated: 2026-04-30
 import React, { useEffect, useState } from 'react';
 import { Plus, Trash2, Loader2, Folder, ChevronRight, Calendar, AlertTriangle, X, HelpCircle, Cpu, Archive, Search, Users, MapPin } from 'lucide-react';
 import { ProjectState, AssetLibraryItem, Character, Scene } from '../types';
 import { getAllProjectsMetadata, createNewProjectState, deleteProjectFromDB, getAllAssetLibraryItems, deleteAssetFromLibrary, loadProjectFromDB, saveProjectToDB } from '../services/storageService';
 import { applyLibraryItemToProject } from '../services/assetLibraryService';
 import { useAlert } from './GlobalAlert';
+import { useTranslation } from '../i18n';
 import kefuCodeImg from '../kefuCode.jpg';
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowModelConfig }) => {
+  const { t, locale } = useTranslation();
   const { showAlert } = useAlert();
   const [projects, setProjects] = useState<ProjectState[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,20 +79,20 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
 
   const confirmDelete = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    
+
     try {
         await deleteProjectFromDB(id);
         await loadProjects();
     } catch (error) {
-        console.error("删除项目失败:", error);
-        showAlert(`删除项目失败: ${error instanceof Error ? error.message : '未知错误'}\n\n请检查浏览器控制台查看详细信息`, { type: 'error' });
+        console.error("Failed to delete project:", error);
+        showAlert(t('dashboard.errorDeleteProject', { message: error instanceof Error ? error.message : t('common.unknown') }), { type: 'error' });
     } finally {
         setDeleteConfirmId(null);
     }
   };
 
   const handleDeleteLibraryItem = (itemId: string) => {
-    showAlert('确定从资产库删除该资源吗？', {
+    showAlert(t('dashboard.deleteAssetConfirm'), {
       type: 'warning',
       showCancel: true,
       onConfirm: async () => {
@@ -98,7 +100,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
           await deleteAssetFromLibrary(itemId);
           setLibraryItems((prev) => prev.filter((item) => item.id !== itemId));
         } catch (error) {
-          showAlert(`删除资产失败: ${error instanceof Error ? error.message : '未知错误'}`, { type: 'error' });
+          showAlert(t('dashboard.errorDeleteFailed', { message: error instanceof Error ? error.message : t('common.unknown') }), { type: 'error' });
         }
       }
     });
@@ -113,12 +115,12 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
       onOpenProject(updated);
       setAssetToUse(null);
     } catch (error) {
-      showAlert(`导入失败: ${error instanceof Error ? error.message : '未知错误'}`, { type: 'error' });
+      showAlert(t('dashboard.errorImportFailed', { message: error instanceof Error ? error.message : t('common.unknown') }), { type: 'error' });
     }
   };
 
   const formatDate = (ts: number) => {
-    return new Date(ts).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    return new Date(ts).toLocaleDateString(locale === 'zh-CN' ? 'zh-CN' : 'en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
   };
 
   const filteredLibraryItems = libraryItems.filter((item) => {
@@ -134,13 +136,13 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
         <aside className="w-64 flex-shrink-0 hidden md:flex flex-col justify-between rounded-[2rem] border border-white/10 bg-slate-950/50 p-5 backdrop-blur-2xl shadow-2xl shadow-cyan-950/20">
           <div>
             <div className="text-[10px] text-cyan-200/60 font-mono tracking-[0.3em] uppercase mb-3">
-              Studio Lobby
+              {t('dashboard.studioLobby')}
             </div>
             <h1 className="text-3xl font-semibold text-white tracking-tight mb-3 flex items-center gap-2">
-              项目库
+              {t('dashboard.title')}
             </h1>
             <div className="text-xs text-slate-400 leading-relaxed mb-8">
-              从故事草稿到制片导出，集中管理你的短剧项目和可复用视觉资产。
+              {t('dashboard.subtitle')}
             </div>
 
             <nav className="space-y-2">
@@ -150,7 +152,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
               >
                 <span className="flex items-center gap-2">
                   <Plus className="w-3.5 h-3.5" />
-                  新建项目
+                  {t('dashboard.createNew')}
                 </span>
               </button>
 
@@ -160,7 +162,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
               >
                 <span className="flex items-center gap-2">
                   <Archive className="w-3.5 h-3.5" />
-                  资产库
+                  {t('dashboard.assetLibrary')}
                 </span>
               </button>
 
@@ -171,7 +173,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
                 >
                   <span className="flex items-center gap-2">
                     <Cpu className="w-3.5 h-3.5" />
-                    模型配置
+                    {t('dashboard.modelConfig')}
                   </span>
                 </button>
               )}
@@ -183,7 +185,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
                 >
                   <span className="flex items-center gap-2">
                     <HelpCircle className="w-3.5 h-3.5" />
-                    帮助
+                    {t('dashboard.help')}
                   </span>
                 </button>
               )}
@@ -194,14 +196,14 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
               >
                 <span className="flex items-center gap-2">
                   <Users className="w-3.5 h-3.5" />
-                  客服咨询
+                  {t('dashboard.support')}
                 </span>
               </button>
             </nav>
           </div>
 
           <div className="pt-6 border-t border-white/10 text-[10px] text-slate-500 font-mono leading-relaxed">
-            <p>左侧导航整合了项目创建、资产库和配置入口，方便快速切换。</p>
+            <p>{t('dashboard.navHint')}</p>
           </div>
         </aside>
 
@@ -209,9 +211,9 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
           <div className="md:hidden mb-6 space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-semibold text-white tracking-tight">项目库</h1>
+                <h1 className="text-2xl font-semibold text-white tracking-tight">{t('dashboard.title')}</h1>
                 <div className="text-[11px] text-cyan-200/60 font-mono tracking-widest uppercase mt-1">
-                  Studio Lobby
+                  {t('dashboard.studioLobby')}
                 </div>
               </div>
             </div>
@@ -221,14 +223,14 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
                 className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-300 to-sky-400 text-slate-950 hover:from-cyan-200 hover:to-sky-300 transition-colors text-[11px] font-bold tracking-widest uppercase rounded-2xl"
               >
                 <Plus className="w-3.5 h-3.5" />
-                新建项目
+                {t('dashboard.createNew')}
               </button>
               <button
                 onClick={() => setShowLibraryModal(true)}
                 className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2 border border-white/10 text-slate-400 hover:text-white hover:border-cyan-300/30 transition-colors text-[11px] font-medium tracking-widest uppercase rounded-2xl bg-white/5"
               >
                 <Archive className="w-3.5 h-3.5" />
-                资产库
+                {t('dashboard.assetLibrary')}
               </button>
             </div>
           </div>
@@ -239,64 +241,64 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            
-            <div 
+
+            <div
               onClick={handleCreate}
               className="group cursor-pointer border border-dashed border-cyan-200/20 hover:border-cyan-200/50 bg-white/[0.04] hover:bg-cyan-300/[0.08] backdrop-blur-xl flex flex-col items-center justify-center min-h-[240px] transition-all rounded-[1.75rem] shadow-xl shadow-slate-950/20"
             >
               <div className="w-14 h-14 border border-cyan-200/20 bg-cyan-300/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-300/20 transition-colors">
                 <Plus className="w-5 h-5 text-cyan-100 group-hover:text-white" />
               </div>
-              <span className="text-cyan-100/60 font-mono text-[10px] uppercase tracking-widest group-hover:text-cyan-50">Create New Project</span>
+              <span className="text-cyan-100/60 font-mono text-[10px] uppercase tracking-widest group-hover:text-cyan-50">{t('dashboard.createCard')}</span>
             </div>
 
             {projects.map((proj) => (
-              <div 
+              <div
                 key={proj.id}
                 onClick={() => onOpenProject(proj)}
                 className="group bg-slate-950/55 border border-white/10 hover:border-cyan-200/35 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[240px] rounded-[1.75rem] backdrop-blur-xl shadow-xl shadow-slate-950/25 hover:-translate-y-1 hover:shadow-cyan-950/30"
               >
                   {deleteConfirmId === proj.id && (
-                    <div 
+                    <div
                         className="absolute inset-0 z-20 bg-slate-950/95 flex flex-col items-center justify-center p-6 space-y-4 animate-in fade-in duration-200 backdrop-blur-xl"
-                        onClick={(e) => e.stopPropagation()} 
+                        onClick={(e) => e.stopPropagation()}
                     >
                         <div className="w-10 h-10 bg-red-900/20 flex items-center justify-center rounded-full">
                            <AlertTriangle className="w-5 h-5 text-red-500" />
                         </div>
                         <div className="text-center space-y-2">
-                            <p className="text-white font-bold text-xs uppercase tracking-widest">确认删除项目？</p>
-                            <p className="text-zinc-500 text-[10px] font-mono">此操作无法撤销</p>
+                            <p className="text-white font-bold text-xs uppercase tracking-widest">{t('dashboard.deleteConfirm')}</p>
+                            <p className="text-zinc-500 text-[10px] font-mono">{t('dashboard.deleteIrreversible')}</p>
                             <div className="text-[9px] text-zinc-600 space-y-1 pt-2 border-t border-zinc-900">
-                              <p>将同时删除以下所有资源：</p>
-                              <p className="text-zinc-700 font-mono">· 角色和场景参考图</p>
-                              <p className="text-zinc-700 font-mono">· 所有关键帧图像</p>
-                              <p className="text-zinc-700 font-mono">· 所有生成的视频片段</p>
-                              <p className="text-zinc-700 font-mono">· 渲染历史记录</p>
+                              <p>{t('dashboard.willAlsoDelete')}</p>
+                              <p className="text-zinc-700 font-mono">· {t('dashboard.deleteCharacterRefs')}</p>
+                              <p className="text-zinc-700 font-mono">· {t('dashboard.deleteKeyframes')}</p>
+                              <p className="text-zinc-700 font-mono">· {t('dashboard.deleteVideos')}</p>
+                              <p className="text-zinc-700 font-mono">· {t('dashboard.deleteRenderLogs')}</p>
                             </div>
                         </div>
                         <div className="flex gap-2 w-full pt-2">
-                            <button 
+                            <button
                                 onClick={cancelDelete}
                                 className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white text-[10px] font-bold uppercase tracking-wider transition-colors border border-white/10 rounded-xl"
                             >
-                                取消
+                                {t('dashboard.cancelDelete')}
                             </button>
-                            <button 
+                            <button
                                 onClick={(e) => confirmDelete(e, proj.id)}
                                 className="flex-1 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-300 hover:text-red-100 text-[10px] font-bold uppercase tracking-wider transition-colors border border-red-400/20 rounded-xl"
                             >
-                                永久删除
+                                {t('dashboard.permanentDelete')}
                             </button>
                         </div>
                     </div>
                   )}
 
                   <div className="flex-1 p-6 relative flex flex-col">
-                     <button 
+                     <button
                         onClick={(e) => requestDelete(e, proj.id)}
                         className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 p-2 hover:bg-white/10 text-slate-500 hover:text-red-300 transition-all rounded-xl z-10"
-                        title="删除项目"
+                        title={t('dashboard.deleteProjectTitle')}
                     >
                         <Trash2 className="w-4 h-4" />
                     </button>
@@ -306,11 +308,11 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
                         <h3 className="text-sm font-bold text-white mb-2 line-clamp-1 tracking-wide">{proj.title}</h3>
                         <div className="flex flex-wrap gap-2 mb-4">
                             <span className="text-[9px] font-mono text-cyan-100/70 border border-cyan-200/15 bg-cyan-300/10 px-2 py-1 uppercase tracking-wider rounded-full">
-                              {proj.stage === 'script' ? '剧情创作' :
-                               proj.stage === 'assets' ? '场景角色' :
-                               proj.stage === 'director' ? 'AI工作台' :
-                               proj.stage === 'export' ? '制片导出' :
-                               proj.stage === 'prompts' ? '资产管理' : '未知'}
+                              {proj.stage === 'script' ? t('dashboard.stageScript') :
+                               proj.stage === 'assets' ? t('dashboard.stageAssets') :
+                               proj.stage === 'director' ? t('dashboard.stageDirector') :
+                               proj.stage === 'export' ? t('dashboard.stageExport') :
+                               proj.stage === 'prompts' ? t('dashboard.stagePrompts') : t('dashboard.stageUnknown')}
                             </span>
                         </div>
                         {proj.scriptData?.logline && (
@@ -344,17 +346,17 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
             <button
               onClick={() => setShowGroupQr(false)}
               className="absolute right-4 top-4 p-2 text-slate-500 hover:text-white hover:bg-white/10 transition-colors rounded-xl"
-              title="关闭"
+              title={t('common.close')}
             >
               <X className="w-4 h-4" />
             </button>
             <div className="space-y-4 text-center">
-              <div className="text-white text-sm font-bold tracking-widest uppercase">客服咨询</div>
-              <div className="text-[10px] text-cyan-100/60 font-mono">扫码添加客服</div>
+              <div className="text-white text-sm font-bold tracking-widest uppercase">{t('dashboard.supportTitle')}</div>
+              <div className="text-[10px] text-cyan-100/60 font-mono">{t('dashboard.supportHint')}</div>
               <div className="bg-white p-3 inline-block rounded-2xl">
-                <img src={kefuCodeImg} alt="客服咨询二维码" className="w-64 h-64 object-contain" />
+                <img src={kefuCodeImg} alt={t('dashboard.supportTitle')} className="w-64 h-64 object-contain" />
               </div>
-              <div className="text-[10px] text-slate-500 font-mono">扫码后请说明来意</div>
+              <div className="text-[10px] text-slate-500 font-mono">{t('dashboard.supportSubtext')}</div>
             </div>
           </div>
         </div>
@@ -369,7 +371,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
             <button
               onClick={() => setShowLibraryModal(false)}
               className="absolute right-4 top-4 p-2 text-slate-500 hover:text-white hover:bg-white/10 transition-colors rounded-xl"
-              title="关闭"
+              title={t('common.close')}
             >
               <X className="w-4 h-4" />
             </button>
@@ -377,15 +379,15 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
               <div>
                 <h2 className="text-lg text-white flex items-center gap-2">
                   <Archive className="w-4 h-4 text-cyan-300" />
-                  资产库
+                  {t('dashboard.assetLibraryTitle')}
                   <span className="text-cyan-100/40 text-xs font-mono uppercase tracking-widest">Asset Library</span>
                 </h2>
                 <p className="text-xs text-slate-400 mt-2">
-                  在项目「场景角色」中将内容加入资产库，跨项目复用
+                  {t('dashboard.assetLibrarySubtitle')}
                 </p>
               </div>
               <div className="text-[10px] text-cyan-100/50 font-mono uppercase tracking-widest">
-                {libraryItems.length} assets
+                {t('dashboard.assetsCount', { count: libraryItems.length })}
               </div>
             </div>
 
@@ -395,7 +397,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
                 <input
                   value={libraryQuery}
                   onChange={(e) => setLibraryQuery(e.target.value)}
-                  placeholder="搜索资产名称..."
+                  placeholder={t('dashboard.searchAssets')}
                   className="w-full pl-9 pr-3 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-300/40"
                 />
               </div>
@@ -410,7 +412,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
                         : 'bg-white/5 text-slate-400 border-white/10 hover:text-white hover:border-cyan-300/30'
                     }`}
                   >
-                    {type === 'all' ? '全部' : type === 'character' ? '角色' : '场景'}
+                    {type === 'all' ? t('dashboard.filterAll') : type === 'character' ? t('dashboard.filterCharacter') : t('dashboard.filterScene')}
                   </button>
                 ))}
               </div>
@@ -422,7 +424,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
               </div>
             ) : filteredLibraryItems.length === 0 ? (
                 <div className="border border-dashed border-cyan-200/15 rounded-2xl p-10 text-center text-slate-500 text-sm">
-                暂无资产。可在项目的「场景角色」中加入资产库。
+                {t('dashboard.emptyAssets')}
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -453,7 +455,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
                         <div>
                           <div className="text-sm text-white font-bold line-clamp-1">{item.name}</div>
                           <div className="text-[10px] text-cyan-100/50 font-mono uppercase tracking-widest mt-1">
-                            {item.type === 'character' ? '角色' : '场景'}
+                            {item.type === 'character' ? t('dashboard.filterCharacter') : t('dashboard.filterScene')}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -461,12 +463,12 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
                             onClick={() => setAssetToUse(item)}
                             className="flex-1 py-2 bg-cyan-300 text-slate-950 hover:bg-cyan-200 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-colors"
                           >
-                            选择项目使用
+                            {t('dashboard.useAssetButton')}
                           </button>
                           <button
                             onClick={() => handleDeleteLibraryItem(item.id)}
                             className="p-2 border border-white/10 text-slate-500 hover:text-red-300 hover:border-red-400/40 rounded-xl transition-colors"
-                            title="删除"
+                            title={t('common.delete')}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -490,17 +492,17 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
             <button
               onClick={() => setAssetToUse(null)}
               className="absolute right-4 top-4 p-2 text-slate-500 hover:text-white hover:bg-white/10 transition-colors rounded-xl"
-              title="关闭"
+              title={t('common.close')}
             >
               <X className="w-4 h-4" />
             </button>
             <div className="space-y-4">
-              <div className="text-white text-sm font-bold tracking-widest uppercase">选择项目使用</div>
+              <div className="text-white text-sm font-bold tracking-widest uppercase">{t('dashboard.selectProjectTitle')}</div>
               <div className="text-[10px] text-cyan-100/55 font-mono">
-                将资产“{assetToUse.name}”导入到以下项目
+                {t('dashboard.selectProjectHint', { name: assetToUse.name })}
               </div>
               {projects.length === 0 ? (
-                <div className="text-zinc-600 text-sm">暂无项目可用</div>
+                <div className="text-zinc-600 text-sm">{t('dashboard.noProjectsAvailable')}</div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {projects.map((proj) => (
@@ -510,7 +512,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, onShowOnboarding, onShowMod
                       className="p-4 text-left border border-white/10 hover:border-cyan-300/30 bg-white/[0.04] hover:bg-white/[0.07] transition-colors rounded-2xl"
                     >
                       <div className="text-sm text-white font-bold line-clamp-1">{proj.title}</div>
-                      <div className="text-[10px] text-zinc-500 font-mono mt-1">最后修改: {formatDate(proj.lastModified)}</div>
+                      <div className="text-[10px] text-zinc-500 font-mono mt-1">{t('dashboard.lastModified', { date: formatDate(proj.lastModified) })}</div>
                     </button>
                   ))}
                 </div>

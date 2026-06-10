@@ -4,6 +4,7 @@ import { Scene } from '../../types';
 import { EditingPrompt, STYLES } from './constants';
 import CollapsibleSection from './CollapsibleSection';
 import PromptEditor from './PromptEditor';
+import { useTranslation } from '../../i18n';
 
 interface Props {
   scenes: Scene[];
@@ -26,6 +27,7 @@ const SceneSection: React.FC<Props> = ({
   onCancelEdit,
   onPromptChange
 }) => {
+  const { t } = useTranslation();
   if (scenes.length === 0) return null;
 
   return (

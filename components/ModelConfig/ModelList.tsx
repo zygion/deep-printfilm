@@ -1,13 +1,14 @@
-/**
- * 模型列表组件
- * 显示特定类型的模型列表，支持选择激活模型
+﻿/**
+ * Model list component
+ * Displays the list of models for a specific type, supports selecting the active model
  */
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Info, CheckCircle } from 'lucide-react';
-import { 
-  ModelType, 
-  ModelDefinition, 
+import { useTranslation } from '../../i18n';
+import {
+  ModelType,
+  ModelDefinition,
 } from '../../types/model';
 import {
   getModels,
@@ -27,13 +28,8 @@ interface ModelListProps {
   onRefresh: () => void;
 }
 
-const typeDescriptions: Record<ModelType, string> = {
-  chat: '用于剧本解析、分镜生成、提示词优化等文本生成任务',
-  image: '用于角色定妆、场景生成、关键帧生成等图片生成任务',
-  video: '用于视频片段生成任务',
-};
-
 const ModelList: React.FC<ModelListProps> = ({ type, onRefresh }) => {
+  const { t } = useTranslation();
   const [models, setModels] = useState<ModelDefinition[]>([]);
   const [isAddingModel, setIsAddingModel] = useState(false);
   const [expandedModelId, setExpandedModelId] = useState<string | null>(null);
@@ -47,7 +43,6 @@ const ModelList: React.FC<ModelListProps> = ({ type, onRefresh }) => {
   const loadModels = () => {
     const allModels = getModels(type);
     setModels(allModels);
-    // 获取当前激活的模型
     const activeConfig = getActiveModelsConfig();
     setActiveModelId(activeConfig[type]);
   };
@@ -57,13 +52,14 @@ const ModelList: React.FC<ModelListProps> = ({ type, onRefresh }) => {
       setActiveModelId(modelId);
       const model = models.find(m => m.id === modelId);
       const provider = model ? getProviderById(model.providerId) : null;
+      const providerSuffix = provider ? t('modelConfig.switchedWithProvider', { provider: provider.name }) : '';
       showAlert(
-        `已切换到 ${model?.name}${provider ? ` (${provider.name})` : ''}`, 
+        t('modelConfig.switched', { name: model?.name, provider: providerSuffix }),
         { type: 'success' }
       );
       onRefresh();
     } else {
-      showAlert('设置激活模型失败，请确保模型已启用', { type: 'error' });
+      showAlert(t('modelConfig.setActiveFailed'), { type: 'error' });
     }
   };
 
@@ -75,14 +71,14 @@ const ModelList: React.FC<ModelListProps> = ({ type, onRefresh }) => {
   };
 
   const handleDeleteModel = (modelId: string) => {
-    showAlert('确定要删除这个模型吗？', {
+    showAlert(t('modelConfig.deleteConfirm'), {
       type: 'warning',
       showCancel: true,
       onConfirm: () => {
         if (removeModel(modelId)) {
           loadModels();
           onRefresh();
-          showAlert('模型已删除', { type: 'success' });
+          showAlert(t('modelConfig.deleted'), { type: 'success' });
         }
       }
     });
@@ -94,9 +90,9 @@ const ModelList: React.FC<ModelListProps> = ({ type, onRefresh }) => {
       setIsAddingModel(false);
       loadModels();
       onRefresh();
-      showAlert('模型添加成功', { type: 'success' });
+      showAlert(t('modelConfig.addSuccess'), { type: 'success' });
     } catch (error) {
-      showAlert(error instanceof Error ? error.message : '添加模型失败', { type: 'error' });
+      showAlert(error instanceof Error ? error.message : t('modelConfig.addFailed'), { type: 'error' });
     }
   };
 
@@ -106,23 +102,21 @@ const ModelList: React.FC<ModelListProps> = ({ type, onRefresh }) => {
 
   return (
     <div className="space-y-4">
-      {/* 类型说明 */}
       <div className="mb-4">
-        <p className="text-xs text-zinc-400">{typeDescriptions[type]}</p>
+        <p className="text-xs text-zinc-400">{t(`modelConfig.typeDescriptions.${type}`)}</p>
       </div>
 
-      {/* 当前激活模型信息 */}
       <div className="bg-cyan-300/10 border border-cyan-200/20 rounded-2xl p-3">
         <div className="flex items-center gap-2 mb-1">
           <CheckCircle className="w-4 h-4 text-cyan-300" />
-          <span className="text-xs font-bold text-cyan-200">当前使用</span>
+          <span className="text-xs font-bold text-cyan-200">{t('modelConfig.currentUsing')}</span>
         </div>
         {(() => {
           const activeModel = models.find(m => m.id === activeModelId);
           const provider = activeModel ? getProviderById(activeModel.providerId) : null;
           return (
             <p className="text-[11px] text-zinc-300">
-              <span className="font-medium">{activeModel?.name || '未选择'}</span>
+              <span className="font-medium">{activeModel?.name || t('modelConfig.notSelected')}</span>
               {provider && (
                 <span className="text-zinc-500 ml-2">
                   → {provider.name} ({provider.baseUrl})
@@ -133,16 +127,13 @@ const ModelList: React.FC<ModelListProps> = ({ type, onRefresh }) => {
         })()}
       </div>
 
-      {/* 提示信息 */}
       <div className="bg-white/[0.045] border border-white/10 rounded-2xl p-3 flex items-start gap-2">
         <Info className="w-4 h-4 text-zinc-500 flex-shrink-0 mt-0.5" />
         <p className="text-[10px] text-zinc-500 leading-relaxed">
-          点击「使用此模型」按钮可切换激活模型。自定义模型配置了独立提供商后，API 请求会发送到对应的地址。
-          点击展开按钮可调整模型参数。
+          {t('modelConfig.hint')}
         </p>
       </div>
 
-      {/* 模型列表 */}
       <div className="space-y-2">
         {models.map((model) => (
           <ModelCard
@@ -158,7 +149,6 @@ const ModelList: React.FC<ModelListProps> = ({ type, onRefresh }) => {
         ))}
       </div>
 
-      {/* 添加模型 */}
       {isAddingModel ? (
         <AddModelForm
           type={type}
@@ -171,7 +161,7 @@ const ModelList: React.FC<ModelListProps> = ({ type, onRefresh }) => {
           className="w-full py-3 border border-dashed border-zinc-700 rounded-lg text-xs text-zinc-500 hover:text-zinc-300 hover:border-zinc-500 transition-colors flex items-center justify-center gap-2"
         >
           <Plus className="w-4 h-4" />
-          添加自定义模型
+          {t('modelConfig.addModel')}
         </button>
       )}
     </div>

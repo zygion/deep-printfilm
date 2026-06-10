@@ -20,8 +20,9 @@ import {
 import { getProviders } from '../../services/modelRegistry';
 import { DEPEI_PROVIDER_BASE_URL } from '../../types/model';
 import { useAlert } from '../GlobalAlert';
+import { useTranslation } from '../../i18n';
 
-/** 只允许使用 GitCC API 提供商（https://api.gitcc.com） */
+/** 只允许使用 GitCC {t('modelManager.providersTitle')}（https://api.gitcc.com） */
 const normalizeBaseUrl = (url: string) => url.trim().replace(/\/+$/, '').toLowerCase();
 const getAllowedProviders = () =>
   getProviders().filter((p) => normalizeBaseUrl(p.baseUrl) === normalizeBaseUrl(DEPEI_PROVIDER_BASE_URL));
@@ -33,6 +34,7 @@ interface AddModelFormProps {
 }
 
 const AddModelForm: React.FC<AddModelFormProps> = ({ type, onSave, onCancel }) => {
+  const { t } = useTranslation();
   const allowedProviders = getAllowedProviders();
   const defaultProvider = allowedProviders[0];
   const { showAlert } = useAlert();
@@ -44,7 +46,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({ type, onSave, onCancel }) =
   const [apiKey, setApiKey] = useState('');
   const [videoMode, setVideoMode] = useState<'sync' | 'async' | 'doubao'>('async');
   
-  // 固定使用 GitCC API 提供商，不允许添加其他
+  // 固定使用 GitCC {t('modelManager.providersTitle')}，不允许添加其他
   const selectedProviderId = defaultProvider?.id || 'antsk';
   
   // 展开高级选项
@@ -56,7 +58,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({ type, onSave, onCancel }) =
       return;
     }
 
-    // 仅使用 GitCC API 提供商
+    // 仅使用 GitCC {t('modelManager.providersTitle')}
     const providerId = selectedProviderId;
 
     // 根据模型类型设置默认参数
@@ -163,7 +165,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({ type, onSave, onCancel }) =
         </p>
       </div>
 
-      {/* 视频模型特有选项 */}
+      {/* {t('modelManager.videoModel')}特有选项 */}
       {type === 'video' && (
         <div>
           <label className="text-[10px] text-zinc-500 block mb-1">API 模式</label>

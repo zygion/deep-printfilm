@@ -5,8 +5,9 @@
 
 import React from 'react';
 import { Cpu, ChevronDown } from 'lucide-react';
-import { 
-  ModelType, 
+import { useTranslation } from '../i18n';
+import {
+  ModelType,
   ModelDefinition,
   ChatModelDefinition,
   ImageModelDefinition,
@@ -28,12 +29,6 @@ interface ModelSelectorProps {
   label?: string;
 }
 
-const typeLabels: Record<ModelType, string> = {
-  chat: '对话模型',
-  image: '图片模型',
-  video: '视频模型',
-};
-
 const ModelSelector: React.FC<ModelSelectorProps> = ({
   type,
   value,
@@ -42,6 +37,12 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
   compact = false,
   label,
 }) => {
+  const { t } = useTranslation();
+  const typeLabels: Record<ModelType, string> = {
+    chat: t('modelSelector.chat'),
+    image: t('modelSelector.image'),
+    video: t('modelSelector.video'),
+  };
   // 获取对应类型的模型列表（仅启用的模型）
   const getModels = (): ModelDefinition[] => {
     let models: ModelDefinition[] = [];
@@ -133,20 +134,21 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
 export default ModelSelector;
 
 /**
- * 视频模型选择器（带 Sora/Veo 模式显示）
+ * 视频{t('modelManager.modelSelection')}器（带 Sora/Veo 模式显示）
  */
 export const VideoModelSelector: React.FC<{
   value: string;
   onChange: (modelId: string) => void;
   disabled?: boolean;
 }> = ({ value, onChange, disabled }) => {
+  const { t } = useTranslation();
   const models = getVideoModels().filter(m => m.isEnabled);
   const selectedModel = models.find(m => m.id === value) as VideoModelDefinition | undefined;
   
   return (
     <div className="space-y-1">
       <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-        视频模型
+        {t('modelManager.videoModel')}
       </label>
       <div className="relative">
         <select
@@ -157,7 +159,7 @@ export const VideoModelSelector: React.FC<{
         >
           {models.map((model) => {
             const videoModel = model as VideoModelDefinition;
-            const modeLabel = videoModel.params.mode === 'async' ? '异步' : '同步';
+            const modeLabel = videoModel.params.mode === 'async' ? t('modelSelector.modeAsync') : t('modelSelector.modeSync');
             return (
               <option key={model.id} value={model.id}>
                 {model.name} ({modeLabel})
@@ -169,10 +171,8 @@ export const VideoModelSelector: React.FC<{
       </div>
       {selectedModel && (
         <p className="text-[9px] text-zinc-600">
-          模式: {selectedModel.params.mode === 'async' ? '异步（需要轮询）' : '同步（直接返回）'}
-          {selectedModel.params.supportedDurations.length > 1 && 
-            ` · 支持时长: ${selectedModel.params.supportedDurations.join('/')}秒`
-          }
+          {t('modelSelector.modeLabel', { mode: selectedModel.params.mode === 'async' ? t('modelSelector.modeAsyncPolling') : t('modelSelector.modeSyncDirect') })}
+          {selectedModel.params.supportedDurations.length > 1 && t('videoGenerator.supportedDurations', { durations: selectedModel.params.supportedDurations.join('/') })}
         </p>
       )}
     </div>

@@ -6,6 +6,7 @@ import { getDefaultVideoPrompt } from './utils';
 import CollapsibleSection from './CollapsibleSection';
 import PromptEditor from './PromptEditor';
 import StatusBadge from './StatusBadge';
+import { useTranslation } from '../../i18n';
 
 interface Props {
   shots: Shot[];
@@ -30,6 +31,7 @@ const KeyframeSection: React.FC<Props> = ({
   onCancelEdit,
   onPromptChange
 }) => {
+  const { t } = useTranslation();
   if (shots.length === 0) return null;
 
   return (

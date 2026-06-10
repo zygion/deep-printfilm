@@ -4,6 +4,7 @@ import { Character } from '../../types';
 import { EditingPrompt, STYLES } from './constants';
 import CollapsibleSection from './CollapsibleSection';
 import PromptEditor from './PromptEditor';
+import { useTranslation } from '../../i18n';
 
 interface Props {
   characters: Character[];
@@ -26,6 +27,7 @@ const CharacterSection: React.FC<Props> = ({
   onCancelEdit,
   onPromptChange
 }) => {
+  const { t } = useTranslation();
   if (characters.length === 0) return null;
 
   return (
