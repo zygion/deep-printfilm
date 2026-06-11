@@ -944,16 +944,12 @@
   "shotCard": {
     "clickEdit": "Click to edit"
   },
-  "shotWorkbench": {
-    "shotDetails": "Shot details",
-    "actionDialogue": "Action & Dialogue"
-  },
   "videoGenerator": {
     "title": "Video generation",
     "previewEditPrompt": "Preview/Edit video prompt",
     "selectModel": "Select video model",
     "settings": "Video settings",
-"textToVideoOnly": "Text-to-video only (no start frame)",
+    "textToVideoOnly": "Text-to-video only (no start frame)",
     "textToVideoOnlyShort": "text-to-video",
     "textToVideoHint": "Don't upload the start keyframe as a reference. Use only the video description. Useful when the start frame is blocked for moderation.",
     "generating": "Generating video ({{aspect}}, {{detail}}{{mode}})...",
