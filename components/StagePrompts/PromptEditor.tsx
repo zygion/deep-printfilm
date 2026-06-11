@@ -1,6 +1,7 @@
 import React from 'react';
 import { Save, X } from 'lucide-react';
 import { STYLES } from './constants';
+import { useTranslation } from '../../i18n';
 
 interface Props {
   value: string;
@@ -17,10 +18,11 @@ const PromptEditor: React.FC<Props> = ({
   onChange,
   onSave,
   onCancel,
-  placeholder = '输入提示词...',
+  placeholder = '',
   size = 'large',
   isVideo = false
 }) => {
+  const { t } = useTranslation();
   const textareaClass = `${STYLES.textarea.base} ${
     size === 'large' ? STYLES.textarea.large :
     size === 'video' ? STYLES.textarea.video :
@@ -43,17 +45,17 @@ const PromptEditor: React.FC<Props> = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={textareaClass}
-        placeholder={placeholder}
+        placeholder={placeholder || t('promptEditor.placeholder')}
         autoFocus
       />
       <div className="flex gap-2">
         <button onClick={onSave} className={saveButtonClass}>
           <Save className="w-3 h-3" />
-          保存
+          {t('promptEditor.save')}
         </button>
         <button onClick={onCancel} className={cancelButtonClass}>
           <X className="w-3 h-3" />
-          取消
+          {t('promptEditor.cancel')}
         </button>
       </div>
     </div>

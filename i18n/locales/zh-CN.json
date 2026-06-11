@@ -953,9 +953,10 @@
     "previewEditPrompt": "预览/编辑视频提示词",
     "selectModel": "选择视频模型",
     "settings": "视频设置",
-    "textToVideoOnly": "纯文生视频（不使用首帧）",
+"textToVideoOnly": "纯文生视频（不使用首帧）",
+    "textToVideoOnlyShort": "纯文生",
     "textToVideoHint": "不上传起始关键帧作为参考图，仅根据视频描述生成。适用于首帧含人物被平台审核拦截的情况。",
-    "generating": "生成视频中 ({{aspect}}, {{detail}})...",
+    "generating": "正在生成视频中 ({{aspect}}, {{detail}}{{mode}})...",
     "regenerate": "重新生成视频",
     "generate": "开始生成视频",
     "generateStartFirst": "请先生成起始帧，或勾选「纯文生视频」",
@@ -1019,7 +1020,15 @@
   "sceneSection": {
     "title": "场景",
     "edit": "编辑",
-    "noPrompt": "未设置提示词"
+    "noPrompt": "未设置提示词",
+    "variations": "角色变体"
+  },
+  "shotWorkbench": {
+    "shotDetails": "镜头详情",
+    "actionDialogue": "叙事动作",
+    "aiSplitShot": "AI拆分镜头",
+    "aiGenerateAction": "AI生成动作建议",
+    "editActionSummary": "编辑叙事动作"
   },
   "keyframeSection": {
     "title": "分镜关键帧",
@@ -1131,7 +1140,8 @@
     "defaultSettings": "默认设置",
     "defaultGenSettings": "默认生成设置",
     "defaultAspect": "默认比例",
-    "defaultDurationSora": "默认时长 (Sora)"
+    "defaultDurationSora": "默认时长 (Sora)",
+    "seconds": "秒"
   },
   "modelSelector": {
     "chat": "对话模型",
@@ -1165,8 +1175,12 @@
     "soraName": "Sora-2",
     "soraDesc": "OpenAI Sora 视频生成，异步模式，支持多种时长"
   },
-  "languageConstants": {
-    "chinese": "Chinese",
-    "japanese": "Japanese"
+"languageConstants": {
+    "chinese": "中文",
+    "japanese": "日语"
+  },
+  "alerts": {
+    "notImplemented": "暂未开发",
+    "notImplementedTitle": "提示"
   }
 }

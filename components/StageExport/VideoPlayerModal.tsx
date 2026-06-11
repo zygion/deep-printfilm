@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Play, Pause, SkipForward, SkipBack, X } from 'lucide-react';
 import { Shot, ProjectState } from '../../types';
 import { STYLES } from './constants';
+import { useTranslation } from '../../i18n';
 
 interface Props {
   completedShots: Shot[];
@@ -28,6 +29,7 @@ const VideoPlayerModal: React.FC<Props> = ({
   onShotChange,
   videoRef
 }) => {
+  const { t } = useTranslation();
   const currentShot = completedShots[currentShotIndex];
   const shotOriginalIndex = project.shots.findIndex(s => s.id === currentShot.id);
 
@@ -37,7 +39,7 @@ const VideoPlayerModal: React.FC<Props> = ({
         <div className="p-4 border-b border-white/10 bg-white/[0.04] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <Play className="w-5 h-5 text-cyan-300" />
-            <h3 className="text-lg font-bold text-white">视频预览</h3>
+            <h3 className="text-lg font-bold text-white">{t('videoGenerator.title')}</h3>
             <span className="px-2 py-0.5 bg-cyan-300/10 border border-cyan-200/15 text-cyan-100/65 text-[10px] rounded-full uppercase font-mono tracking-wider">
               Shot {shotOriginalIndex + 1} / {project.shots.length}
             </span>

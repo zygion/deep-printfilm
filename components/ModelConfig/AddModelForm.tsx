@@ -54,7 +54,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({ type, onSave, onCancel }) =
 
   const handleSave = () => {
     if (!name.trim() || !apiModel.trim()) {
-      showAlert('请填写模型名称和 API 模型名', { type: 'warning' });
+      showAlert(t('addModelForm.missingFields'), { type: 'warning' });
       return;
     }
 
@@ -95,49 +95,49 @@ const AddModelForm: React.FC<AddModelFormProps> = ({ type, onSave, onCancel }) =
 
   return (
     <div className="bg-white/[0.045] border border-white/10 rounded-2xl p-4 space-y-4">
-      <h4 className="text-sm font-bold text-white">添加自定义模型</h4>
+      <h4 className="text-sm font-bold text-white">{t('addModelForm.title')}</h4>
       
-      {/* 基础信息 */}
+      {/* {t('addModelForm.sectionBasic')} */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="text-[10px] text-zinc-500 block mb-1">模型名称 *</label>
+          <label className="text-[10px] text-zinc-500 block mb-1">{t('addModelForm.nameLabel')}</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="如：GPT-4 Turbo"
+            placeholder={t('addModelForm.namePlaceholder')}
             className="w-full bg-white/[0.06] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500"
           />
         </div>
         <div>
-          <label className="text-[10px] text-zinc-500 block mb-1">API 模型名 *（可与内置重复）</label>
+          <label className="text-[10px] text-zinc-500 block mb-1">{t('addModelForm.apiModelLabel')}</label>
           <input
             type="text"
             value={apiModel}
             onChange={(e) => setApiModel(e.target.value)}
-            placeholder="如：gpt-4-turbo、claude-3-opus"
+            placeholder={t('addModelForm.apiModelPlaceholder')}
             className="w-full bg-white/[0.06] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 font-mono"
           />
           <p className="text-[9px] text-zinc-600 mt-1">
-            该字段会作为 API 请求中的 model 参数；内部 ID 会自动生成
+            {t('addModelForm.apiModelHint')}
           </p>
         </div>
       </div>
 
       <div>
-        <label className="text-[10px] text-zinc-500 block mb-1">描述（可选）</label>
+        <label className="text-[10px] text-zinc-500 block mb-1">{t('addModelForm.descriptionLabel')}</label>
         <input
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="可选的描述信息"
+          placeholder={t('addModelForm.descriptionPlaceholder')}
           className="w-full bg-white/[0.06] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500"
         />
       </div>
 
-      {/* API 端点 */}
+      {/* {t('addModelForm.sectionEndpoint')} */}
       <div>
-        <label className="text-[10px] text-zinc-500 block mb-1">API 端点 (Endpoint)</label>
+        <label className="text-[10px] text-zinc-500 block mb-1">{t('addModelForm.endpointLabel')}</label>
         <input
           type="text"
           value={endpoint}
@@ -146,29 +146,29 @@ const AddModelForm: React.FC<AddModelFormProps> = ({ type, onSave, onCancel }) =
           className="w-full bg-white/[0.06] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 font-mono"
         />
         <p className="text-[9px] text-zinc-600 mt-1">
-          留空则使用默认端点
+          {t('addModelForm.endpointHint')}
         </p>
       </div>
 
-      {/* 模型专属 API Key（可选） */}
+      {/* {t('addModelForm.sectionApiKey')} */}
       <div>
-        <label className="text-[10px] text-zinc-500 block mb-1">API Key（可选）</label>
+        <label className="text-[10px] text-zinc-500 block mb-1">{t('addModelForm.apiKeyLabel')}</label>
         <input
           type="password"
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
-          placeholder="留空则使用全局 API Key"
+          placeholder={t('addModelForm.apiKeyPlaceholder')}
           className="w-full bg-white/[0.06] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 font-mono"
         />
         <p className="text-[9px] text-zinc-600 mt-1">
-          为此模型单独配置 API Key，留空则使用全局配置的 Key
+          {t('addModelForm.apiKeyHint')}
         </p>
       </div>
 
-      {/* {t('modelManager.videoModel')}特有选项 */}
+      {/* {t('addModelForm.sectionVideo')} */}
       {type === 'video' && (
         <div>
-          <label className="text-[10px] text-zinc-500 block mb-1">API 模式</label>
+          <label className="text-[10px] text-zinc-500 block mb-1">{t('addModelForm.videoModeLabel')}</label>
           <div className="flex gap-2">
             <button
               onClick={() => setVideoMode('sync')}
@@ -178,7 +178,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({ type, onSave, onCancel }) =
                   : 'bg-white/[0.06] text-zinc-400 hover:bg-white/10'
               }`}
             >
-              同步模式（Chat Completion 类）
+              {t('addModelForm.videoModeSync')}
             </button>
             <button
               onClick={() => setVideoMode('async')}
@@ -188,7 +188,7 @@ const AddModelForm: React.FC<AddModelFormProps> = ({ type, onSave, onCancel }) =
                   : 'bg-white/[0.06] text-zinc-400 hover:bg-white/10'
               }`}
             >
-              异步模式（Sora 类）
+              {t('addModelForm.videoModeAsync')}
             </button>
             <button
               onClick={() => setVideoMode('doubao')}
@@ -198,23 +198,23 @@ const AddModelForm: React.FC<AddModelFormProps> = ({ type, onSave, onCancel }) =
                   : 'bg-white/[0.06] text-zinc-400 hover:bg-white/10'
               }`}
             >
-              Doubao Seedance（Ark 任务制）
+              {t('addModelForm.videoModeDoubao')}
             </button>
           </div>
           <p className="text-[9px] text-zinc-600 mt-1">
-            同步模式：直接返回结果；异步模式：先创建任务，再轮询获取结果；Doubao：适配 Doubao Seedance 的 Ark 任务制接口
+            {t('addModelForm.videoModeHint')}
           </p>
         </div>
       )}
 
-      {/* 操作按钮 */}
+      {/* {t('addModelForm.sectionActions')} */}
       <div className="flex gap-3 pt-2">
         <button
           onClick={handleSave}
           className="flex-1 py-2.5 bg-cyan-300 text-slate-950 text-xs font-bold rounded-xl hover:bg-cyan-200 transition-colors flex items-center justify-center gap-1"
         >
           <Check className="w-3 h-3" />
-          添加模型
+          {t('addModelForm.save')}
         </button>
         <button
           onClick={onCancel}

@@ -953,13 +953,14 @@
     "previewEditPrompt": "Preview/Edit video prompt",
     "selectModel": "Select video model",
     "settings": "Video settings",
-    "textToVideoOnly": "Text-to-video only (no start frame)",
+"textToVideoOnly": "Text-to-video only (no start frame)",
+    "textToVideoOnlyShort": "text-to-video",
     "textToVideoHint": "Don't upload the start keyframe as a reference. Use only the video description. Useful when the start frame is blocked for moderation.",
-    "generating": "Generating video ({{aspect}}, {{detail}})...",
+    "generating": "Generating video ({{aspect}}, {{detail}}{{mode}})...",
     "regenerate": "Regenerate video",
     "generate": "Generate video",
     "generateStartFirst": "Please generate a start frame first, or enable \"Text-to-video only\"",
-    "optimizingDesc": "Optimizing description…",
+    "optimizingDesc": "Optimizing description...",
     "aiOptimizeDesc": "AI optimize description (bypass moderation)",
     "i2vMode": "* No end frame detected, will use image-to-video mode",
     "textToVideoMode": "* Text-to-video mode: start/end frames will not be uploaded, only the video description is sent",
@@ -1019,7 +1020,15 @@
   "sceneSection": {
     "title": "Scenes",
     "edit": "Edit",
-    "noPrompt": "No prompt set"
+    "noPrompt": "No prompt set",
+    "variations": "Character variations"
+  },
+  "shotWorkbench": {
+    "shotDetails": "Shot details",
+    "actionDialogue": "Action & Dialogue",
+    "aiSplitShot": "AI split shot",
+    "aiGenerateAction": "AI generate action suggestions",
+    "editActionSummary": "Edit action summary"
   },
   "keyframeSection": {
     "title": "Shot keyframes",
@@ -1131,7 +1140,8 @@
     "defaultSettings": "Default settings",
     "defaultGenSettings": "Default generation settings",
     "defaultAspect": "Default aspect ratio",
-    "defaultDurationSora": "Default duration (Sora)"
+    "defaultDurationSora": "Default duration (Sora)",
+    "seconds": "s"
   },
   "modelSelector": {
     "chat": "Chat model",
@@ -1168,5 +1178,9 @@
   "languageConstants": {
     "chinese": "Chinese",
     "japanese": "Japanese"
+  },
+  "alerts": {
+    "notImplemented": "Not yet implemented",
+    "notImplementedTitle": "Notice"
   }
 }

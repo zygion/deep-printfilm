@@ -57,7 +57,7 @@ const ConfigPanel: React.FC<Props> = ({
 
   const durationOptions = DURATION_KEYS.map(v => ({ value: v, label: t(`durations.${v}`) }));
   const languageOptions = LANGUAGE_KEYS.map(v => ({
-    value: v === 'chinese' ? '中文' : v === 'japanese' ? '日本語' : v.charAt(0).toUpperCase() + v.slice(1),
+    value: v,
     label: t(`languages.${v}`)
   }));
   const visualStyleOptions = VISUAL_STYLE_KEYS.map(v => ({

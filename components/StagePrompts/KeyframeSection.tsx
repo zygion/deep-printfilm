@@ -36,7 +36,7 @@ const KeyframeSection: React.FC<Props> = ({
 
   return (
     <CollapsibleSection
-      title="分镜关键帧"
+      title={t('keyframeSection.title')}
       icon={<Film className="w-5 h-5" />}
       count={shots.length}
       isExpanded={isExpanded}
@@ -49,7 +49,7 @@ const KeyframeSection: React.FC<Props> = ({
             <div className="mb-3">
               <div className="flex items-center gap-2 mb-1">
                 <span className={STYLES.badge.shotNumber}>
-                  镜头 {shotIndex + 1}
+                  {t('keyframeSection.shot', { num: shotIndex + 1 })}
                 </span>
                 {scene && (
                   <span className="text-xs text-zinc-500">
@@ -59,7 +59,7 @@ const KeyframeSection: React.FC<Props> = ({
               </div>
               <p className="text-sm text-zinc-400">{shot.actionSummary}</p>
               <p className="text-xs text-zinc-600 mt-1">
-                {shot.cameraMovement} · {shot.shotSize || '标准镜头'}
+                {shot.cameraMovement} · {shot.shotSize || t('keyframeSection.standardShot')}
               </p>
             </div>
 
@@ -73,7 +73,7 @@ const KeyframeSection: React.FC<Props> = ({
                           ? STYLES.badge.keyframeStart 
                           : STYLES.badge.keyframeEnd
                       }>
-                        {keyframe.type === 'start' ? '起始帧' : '结束帧'}
+                        {keyframe.type === 'start' ? t('keyframeSection.startFrame') : t('keyframeSection.endFrame')}
                       </span>
                       <StatusBadge status={keyframe.status || 'idle'} />
                     </div>
@@ -81,7 +81,7 @@ const KeyframeSection: React.FC<Props> = ({
                       onClick={() => onStartEdit('keyframe', keyframe.id, keyframe.visualPrompt, undefined, shot.id)}
                       className={STYLES.button.editSmall}
                     >
-                      编辑
+                      {t('keyframeSection.edit')}
                     </button>
                   </div>
 
@@ -105,7 +105,7 @@ const KeyframeSection: React.FC<Props> = ({
                     <div className="mt-2 rounded-xl overflow-hidden border border-white/10">
                       <img 
                         src={keyframe.imageUrl} 
-                        alt={`关键帧 ${keyframe.type}`}
+                        alt={`${keyframe.type === 'start' ? t('keyframeSection.startFrame') : t('keyframeSection.endFrame')} ${t('keyframeSection.title')}`}
                         className="w-full h-auto"
                       />
                     </div>
@@ -119,7 +119,7 @@ const KeyframeSection: React.FC<Props> = ({
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <span className={STYLES.badge.videoPrompt}>
-                          视频生成提示词
+                          {t('keyframeSection.videoGenPrompt')}
                         </span>
                         <StatusBadge status={shot.interval.status || 'idle'} />
                       </div>
@@ -130,7 +130,7 @@ const KeyframeSection: React.FC<Props> = ({
                         }}
                         className={STYLES.button.editVideo}
                       >
-                        编辑
+                        {t('keyframeSection.edit')}
                       </button>
                     </div>
 
@@ -150,7 +150,7 @@ const KeyframeSection: React.FC<Props> = ({
                             <span className="text-zinc-500">
                               {getDefaultVideoPrompt(shot)}
                               <span className="block mt-1 text-yellow-600/70">
-                                ⚠ 此视频生成时未保存提示词，以上为推测内容
+                                ⚠ {t('keyframeSection.unsavedPrompt')}
                               </span>
                             </span>
                           )}

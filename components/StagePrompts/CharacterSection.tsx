@@ -32,7 +32,7 @@ const CharacterSection: React.FC<Props> = ({
 
   return (
     <CollapsibleSection
-      title="角色"
+      title={t('characterSection.title')}
       icon={<User className="w-5 h-5" />}
       count={characters.length}
       isExpanded={isExpanded}
@@ -51,7 +51,7 @@ const CharacterSection: React.FC<Props> = ({
               onClick={() => onStartEdit('character', char.id, char.visualPrompt || '')}
               className={STYLES.button.edit}
             >
-              编辑
+              {t('characterSection.edit')}
             </button>
           </div>
 
@@ -65,13 +65,13 @@ const CharacterSection: React.FC<Props> = ({
             />
           ) : (
             <p className={STYLES.display.base}>
-              {char.visualPrompt || '未设置提示词'}
+              {char.visualPrompt || t('characterSection.noPrompt')}
             </p>
           )}
 
           {char.variations && char.variations.length > 0 && (
             <div className="mt-4 pl-4 border-l-2 border-cyan-300/25 space-y-3">
-              <h4 className="text-xs text-zinc-500 uppercase tracking-wider font-bold">角色变体</h4>
+              <h4 className="text-xs text-zinc-500 uppercase tracking-wider font-bold">{t('characterSection.variations')}</h4>
               {char.variations.map(variation => (
                 <div key={variation.id} className={STYLES.card.nested}>
                   <div className="flex items-center justify-between mb-2">
@@ -80,7 +80,7 @@ const CharacterSection: React.FC<Props> = ({
                       onClick={() => onStartEdit('character-variation', char.id, variation.visualPrompt, variation.id)}
                       className={STYLES.button.editSmall}
                     >
-                      编辑
+                      {t('characterSection.edit')}
                     </button>
                   </div>
 

@@ -57,7 +57,7 @@ const ActionButtons: React.FC<Props> = ({
       
       <button 
         className={STYLES.button.tertiary}
-        onClick={() => showAlert('暂未开发', { type: 'info', title: '提示' })}
+        onClick={() => showAlert(t('alerts.notImplemented'), { type: 'info', title: t('alerts.notImplementedTitle') })}
       >
         <FileVideo className="w-4 h-4" />
         Export EDL / XML

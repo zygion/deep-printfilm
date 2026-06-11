@@ -285,7 +285,7 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
                       className="flex-1 py-2 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-500 flex items-center justify-center gap-1"
                     >
                       <Check className="w-3 h-3" />
-                      保存
+{t('common.save')}
                     </button>
                     <button
                       onClick={() => setEditingProviderId(null)}
@@ -398,7 +398,7 @@ const ModelManagerTab: React.FC<ModelManagerTabProps> = ({ onConfigChange }) => 
                       : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
                   }`}
                 >
-                  {ratio === '16:9' ? '横屏' : ratio === '9:16' ? '竖屏' : '方形'}
+                  {ratio === '16:9' ? t('modelManager.landscape') : ratio === '9:16' ? t('modelManager.portrait') : t('modelManager.square')}
                 </button>
               ))}
             </div>
